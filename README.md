@@ -87,16 +87,19 @@ Gotchas
     var $textarea = $('textarea');
     $textarea.val('Line 1\nLine 2');
 
-    // All browsers: "Line 1"
+    // All browsers: "ine 1"
     console.log($textarea.range(1, 6).range().text);
 
-    // IE: "ine 1".  Real browsers: "ine 1\n"
+    // Internet Explorer:  "ine 1"
+    // All other browsers: "ine 1\n"
     console.log($textarea.range(1, 7).range().text);
 
-    // IE: "ine 1".  Real browsers: "ine 1\nL"
+    // Internet Explorer:  "ine 1"
+    // All other browsers: "ine 1\nL"
     console.log($textarea.range(1, 8).range().text);
 
-    // IE: "ine 1\r\nL".  Real browsers: "ine 1\nLi"
+    // Internet Explorer:  "ine 1\r\nL"
+    // All other browsers: "ine 1\nLi"
     console.log($textarea.range(1, 9).range().text);
     ```
 
