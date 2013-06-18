@@ -17,8 +17,7 @@ Features
 API
 ===
 
-```$.fn.caret()```
-------------------
+## ```$.fn.caret()```
 
 Interrogate and manipulate the cursor position of an input field at a single point without selecting any text.
 
@@ -38,8 +37,7 @@ Insert text at the current cursor position of the first matched element and plac
 
 *   ```text``` ```String```: Text to insert at the current cursor position.
 
-```$.fn.range()```
-------------------
+## ```$.fn.range()```
 
 Interrogate and manipulate the selected range of an input field.
 
