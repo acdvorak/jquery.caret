@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Newline test - $.fn.caret() and $.fn.range()</title>
+        <style>
+            textarea {
+                width: 50em;
+                height: 10em;
+            }
+        </style>
+    </head>
+    <body>
+        <textarea></textarea>
+
+        <script>
+            // IE
+            if (typeof(window.console) === 'undefined') {
+                window.console = {
+                    log: function() {},
+                    debug: function() {},
+                    info: function() {},
+                    warn: function() {},
+                    error: function() {}
+                };
+            }
+        </script>
+        <script src="../lib/jquery/core/jquery-1.10.0.min.js"></script>
+        <script src="../src/jquery.caret.js"></script>
+        <script>
+            String.prototype.visualizeNewlines = function() {
+                return this.replace(/\n/g, '\\n').replace(/\r/g, '\\r');
+            };
+
+            $(function() {
+                var lineNumbers = [ 1, 2, 3, 4 ];
+                var lines = $.map(lineNumbers,function (val) { return 'Line ' + val; });
+                var text = lines.join('\n');
+
+                var $textarea = $('textarea');
+
+                $textarea.val(text);
+
+                function testRange(start, end, expectedText) {
+                    $textarea.range(start, end);
+
+                    var range = $textarea.range();
+                    var expectedLength = (end - start);
+
+                    alert(
+                            (range.length === expectedLength) + ': found ' + range.length + ', expected ' + expectedLength + '\n' +
+                            (range.text === expectedText) + ': found "' + range.text.visualizeNewlines() + '"' + ', expected ' + '"' + expectedText.visualizeNewlines() + '"'
+                    );
+                }
+
+                testRange(1, 6, 'ine 1');
+                testRange(1, 7, 'ine 1\n');
+                testRange(1, 8, 'ine 1\nL');
+                testRange(1, 9, 'ine 1\nLi');
+            });
+        </script>
+    </body>
+</html>
