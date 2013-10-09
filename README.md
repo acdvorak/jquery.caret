@@ -15,6 +15,7 @@ Features
 *   Insert text at cursor position
 *   Replace selected range with text
 *   Handles differences in line endings between browsers
+*   Select all text within a child-bearing element (e.g., ```<div>``` or ```<span>```)
 
 API
 ===
