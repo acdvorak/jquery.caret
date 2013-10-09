@@ -1,11 +1,303 @@
 /*! jQuery Caret plugin v1.0.0 | (c) 2012, 2013 Andrew C. Dvorak | github.com/acdvorak/jquery.caret */
-(function ($) {
+(function($, undefined) {
+
     var _input = document.createElement('input');
 
-    var features = {
+    var _support = {
         setSelectionRange: ('setSelectionRange' in _input) || ('selectionStart' in _input),
         createTextRange: ('createTextRange' in _input) || ('selection' in document)
     };
+
+	/**
+	 * @class
+	 * @constructor
+	 */
+	var Range = function() {
+		this.start = 0;
+		this.end = 0;
+		this.length = 0;
+		this.text = '';
+	};
+
+	var _getCaretW3 = function(input) {
+		return input.selectionStart;
+	};
+
+	var _getCaretIE = function(input) {
+		input.focus();
+
+		var r = document.selection.createRange();
+
+		if (r == null) {
+			return 0;
+		}
+
+		var tr1 = input.createTextRange();
+		var tr2 = tr1.duplicate();
+
+		tr1.moveToBookmark(r.getBookmark());
+		tr2.setEndPoint('EndToStart', tr1);
+
+		return tr2.text.length;
+	};
+
+	/**
+	 * Gets the position of the caret in the given input.
+	 * @param {HTMLInputElement|HTMLTextAreaElement} input input or textarea element
+	 * @returns {Number}
+	 * @see http://stackoverflow.com/questions/263743/how-to-get-cursor-position-in-textarea/263796#263796
+	 */
+	var _getCaret = function(input) {
+		if (!input) {
+			return undefined;
+		}
+
+		// Mozilla, et al.
+		if (_support.setSelectionRange) {
+			return _getCaretW3(input);
+		}
+		// IE
+		else if (_support.createTextRange) {
+			return _getCaretIE(input);
+		}
+
+		return undefined;
+	};
+
+	var _setCaretW3 = function(input, pos) {
+		input.setSelectionRange(pos, pos);
+	};
+
+	var _setCaretIE = function(input, pos) {
+		var range = input.createTextRange();
+		range.move('character', pos);
+		range.select();
+	};
+
+	/**
+	 * Sets the position of the caret in the given input.
+	 * @param {HTMLInputElement|HTMLTextAreaElement} input input or textarea element
+	 * @param {Number} pos
+	 * @see http://parentnode.org/javascript/working-with-the-cursor-position/
+	 */
+	var _setCaret = function(input, pos) {
+		input.focus();
+
+		// Mozilla, et al.
+		if (_support.setSelectionRange) {
+			_setCaretW3(input, pos);
+		}
+		// IE
+		else if (_support.createTextRange) {
+			_setCaretIE(input, pos);
+		}
+	};
+
+	/**
+	 * Inserts the specified text at the current caret position in the given input.
+	 * @param {HTMLInputElement|HTMLTextAreaElement} input input or textarea element
+	 * @param {String} text
+	 * @see http://parentnode.org/javascript/working-with-the-cursor-position/
+	 */
+	var _insertAtCaret = function(input, text) {
+		var curPos = _getCaret(input);
+
+		var newLength = +(curPos + text.length + (input.value.length - curPos));
+		var maxLength = +input.getAttribute('maxlength');
+
+		if(input.hasAttribute('maxlength') && newLength > maxLength) {
+			var delta = text.length - (newLength - maxLength);
+			text = text.substr(0, delta);
+		}
+
+		input.value = input.value.substr(0, curPos) + text + input.value.substr(curPos);
+
+		_setCaret(input, curPos + text.length);
+	};
+
+	var _getInputRangeW3 = function(input) {
+		var range = new Range();
+
+		range.start = input.selectionStart;
+		range.end = input.selectionEnd;
+
+		var min = Math.min(range.start, range.end);
+		var max = Math.max(range.start, range.end);
+
+		range.length = max - min;
+		range.text = input.value.substring(min, max);
+
+		return range;
+	};
+
+	var _getInputRangeIE = function(input) {
+		var range = new Range();
+
+		input.focus();
+
+		var sr = document.selection.createRange();
+
+		if (!sr) {
+			return range;
+		}
+
+		var tr_beginning = input.createTextRange();
+		var tr_selection = tr_beginning.duplicate();
+
+		tr_selection.moveToBookmark(sr.getBookmark());
+		tr_beginning.setEndPoint('EndToStart', tr_selection);
+
+		var text_selected_fixed = sr.text.replace(/[\r\n]/g, '.'); // for some reason IE doesn't always count the \n and \r in the length
+		var text_entire_fixed = input.value.replace(/[\r\n]/g, '.');
+
+		range.start = tr_beginning.text.length;
+		range.end = range.start + text_selected_fixed.length;
+
+		range.length = text_selected_fixed.length;
+		range.text = sr.text;
+
+		if(range.length === 0) {
+			range.start = range.end = _getCaret(input);
+		}
+
+		return range;
+	};
+
+	/**
+	 * Gets the selected text range of the given input.
+	 * @param {HTMLInputElement|HTMLTextAreaElement} input input or textarea element
+	 * @returns {Range}
+	 * @see http://stackoverflow.com/a/263796/467582
+	 * @see http://stackoverflow.com/a/2966703/467582
+	 */
+	var _getInputRange = function(input) {
+		if (!input) {
+			return undefined;
+		}
+
+		// Mozilla, et al.
+		if (_support.setSelectionRange) {
+			return _getInputRangeW3(input);
+		}
+		// IE
+		else if (_support.createTextRange) {
+			return _getInputRangeIE(input);
+		}
+
+		return undefined;
+	};
+
+	var _setInputRangeW3 = function(input, startPos, endPos) {
+		input.setSelectionRange(startPos, endPos);
+	};
+
+	var _setInputRangeIE = function(input, startPos, endPos) {
+		var i;
+		var tr = input.createTextRange();
+
+		// Fix IE from counting the newline characters as two separate characters
+		var stop_it = startPos;
+
+		for (i = 0; i < stop_it; i++) {
+			if (input.value.substr(i, 1).search(/[\r\n]/) !== -1) {
+				startPos = startPos - 0.5;
+			}
+		}
+
+		stop_it = endPos;
+
+		for (i = 0; i < stop_it; i++) {
+			if (input.value.substr(i, 1).search(/[\r\n]/) !== -1) {
+				endPos = endPos - 0.5;
+			}
+		}
+
+		tr.moveEnd('textedit', -1);
+		tr.moveStart('character', startPos);
+		tr.moveEnd('character', endPos - startPos);
+		tr.select();
+	};
+
+	/**
+	 * Sets the selected text range of (i.e., highlights text in) the given input.
+	 * @param {HTMLInputElement|HTMLTextAreaElement} input input or textarea element
+	 * @param {Number} startPos Zero-based index
+	 * @param {Number} endPos Zero-based index
+	 * @see http://parentnode.org/javascript/working-with-the-cursor-position/
+	 * @see http://stackoverflow.com/a/2966703/467582
+	 */
+	var _setInputRange = function(input, startPos, endPos) {
+		// Mozilla, et al.
+		if (_support.setSelectionRange) {
+			_setInputRangeW3(input, startPos, endPos);
+		}
+		// IE
+		else if (_support.createTextRange) {
+			_setInputRangeIE(input, startPos, endPos);
+		}
+	};
+
+	/**
+	 * Replaces the currently selected text with the given string.
+	 * @param {HTMLInputElement|HTMLTextAreaElement} input input or textarea element
+	 * @param {String} text New text that will replace the currently selected text.
+	 * @see http://parentnode.org/javascript/working-with-the-cursor-position/
+	 */
+	var _replaceInputRange = function(input, text) {
+		var $input = $(input);
+
+		var oldValue = $input.val();
+		var selection = _getInputRange(input);
+
+		// TODO: This throws an error in IE7
+		var newLength = +(selection.start + text.length + (oldValue.length - selection.end));
+		var maxLength = +$input.attr('maxlength');
+
+		if($input.is('[maxlength]') && newLength > maxLength) {
+			var delta = text.length - (newLength - maxLength);
+			text = text.substr(0, delta);
+		}
+
+		// Now that we know what the user selected, we can replace it
+		var startText = oldValue.substr(0, selection.start);
+		var endText = oldValue.substr(selection.end);
+		$input.val(startText + text + endText);
+
+		// Reset the selection
+		var startPos = selection.start;
+		var endPos = startPos + text.length;
+
+		_setInputRange(input, selection.length ? startPos : endPos, endPos);
+	};
+
+	var _selectAllW3 = function(elem) {
+		var selection = window.getSelection();
+		var range = document.createRange();
+		range.selectNodeContents(elem);
+		selection.removeAllRanges();
+		selection.addRange(range);
+	};
+
+	var _selectAllIE = function(elem) {
+		var range = document.body.createTextRange();
+		range.moveToElementText(elem);
+		range.select();
+	};
+
+	/**
+	 * Select all text in the given element.
+	 * @param {HTMLElement} elem Any element other than an input or textarea.
+	 */
+	var _highlight = function(elem) {
+		// Mozilla, et al.
+		if (_support.setSelectionRange) {
+			_selectAllW3(elem);
+		}
+		// IE
+		else if (_support.createTextRange) {
+			_selectAllIE(elem);
+		}
+	};
 
     $.fn.extend({
 
@@ -20,284 +312,59 @@
          *        $('input:first').caret("Some text")
          */
         caret: function () {
-            var el = this.length > 0 ? this[0] : null;
-            var $el = $(el);
+			var $inputs = this.filter('input, textarea');
 
-            var valid = this.length && this.is('input, textarea');
-            var range;
-
-            // getCaret()
-            // From http://stackoverflow.com/questions/263743/how-to-get-cursor-position-in-textarea/263796#263796
+			// getCaret()
             if (arguments.length === 0) {
-                if (!valid) {
-                    return;
-                }
-
-                // Mozilla, et al.
-                if (features.setSelectionRange) {
-                    return el.selectionStart;
-                }
-                // IE
-                else if (features.createTextRange) {
-                    $el.focus();
-
-                    var r = document.selection.createRange();
-
-                    if (r == null) {
-                        return 0;
-                    }
-
-                    var tr1 = el.createTextRange();
-                    var tr2 = tr1.duplicate();
-
-                    tr1.moveToBookmark(r.getBookmark());
-                    tr2.setEndPoint('EndToStart', tr1);
-
-                    return tr2.text.length;
-                }
-
-                return 0;
+				var input = $inputs.get(0);
+				return _getCaret(input);
             }
             // setCaret(position)
-            // From http://parentnode.org/javascript/working-with-the-cursor-position/
-            else if (typeof arguments[0] === 'number' && /^\d+$/.test(arguments[0])) {
-                if (!valid) {
-                    return this;
-                }
-
-                var pos = arguments[0] * 1;
-
-                el.focus();
-
-                // Mozilla, et al.
-                if (features.setSelectionRange) {
-                    el.setSelectionRange(pos, pos);
-                }
-                // IE
-                else if (features.createTextRange) {
-                    range = el.createTextRange();
-                    range.move('character', pos);
-                    range.select();
-                }
+            else if ($.isNumeric(arguments[0])) {
+				var pos = Math.floor(arguments[0]);
+				return this.each(function(_i, input) {
+					_setCaret(input, pos);
+				});
             }
             // insertAtCaret(text)
-            // From http://parentnode.org/javascript/working-with-the-cursor-position/
             else {
-                if (!valid) {
-                    return this;
-                }
-
-                var text = arguments[0];
-                var curPos = this.caret();
-
-                var newLength = (curPos + text.length + (el.value.length - curPos)) * 1;
-                var maxLength = el.getAttribute('maxlength') * 1;
-
-                // TODO: is there a better way to implement this?
-                if(el.hasAttribute('maxlength') && newLength > maxLength) {
-                    var delta = text.length - (newLength - maxLength);
-                    text = text.substr(0, delta);
-                }
-
-                el.value = el.value.substr(0, curPos) + text + el.value.substr(curPos);
-
-                this.caret(curPos + text.length);
+				var text = arguments[0];
+				return this.each(function(_i, input) {
+					_insertAtCaret(input, text);
+				});
             }
-
-            return this;
         },
 
-        range: function () {
-            var el = this.length > 0 ? this[0] : null;
-            var $el = $(el);
-
-            var valid = this.length && this.is('input, textarea');
-            var range = { start: 0, end: 0, length: 0, text: '' };
+        range: function() {
+			var $inputs = this.filter('input, textarea');
 
             // getRange() = { start: pos, end: pos }
-            // From http://stackoverflow.com/questions/263743/how-to-get-cursor-position-in-textarea/263796#263796
-            //      http://stackoverflow.com/a/2966703/467582
             if (arguments.length === 0) {
-                if (!valid) {
-                    return range;
-                }
-
-//                var $input = $(this);
-//                var saved = $input.data('range');
-//
-//                if(saved) {
-//                    $input.removeData('range')
-//                    return range;
-//                }
-
-                // Mozilla, et al.
-                if (features.setSelectionRange) {
-                    range.start = el.selectionStart;
-                    range.end = el.selectionEnd;
-
-                    var min = Math.min(range.start, range.end);
-                    var max = Math.max(range.start, range.end);
-
-                    range.length = max - min;
-                    range.text = el.value.substring(min, max);
-                }
-                // IE
-                else if (features.createTextRange) {
-                    $el.focus();
-
-                    var sr = document.selection.createRange();
-
-                    if (!sr) {
-                        return range;
-                    }
-
-                    // http://stackoverflow.com/a/2966703/467582
-                    if(false) {
-                        e.focus();
-                        var r = document.selection.createRange();
-                        var tr = e.createTextRange();
-                        var tr2 = tr.duplicate();
-                        tr2.moveToBookmark(r.getBookmark());
-                        tr.setEndPoint('EndToStart',tr2);
-                        if (r == null || tr == null) return { start: e.value.length, end: e.value.length, length: 0, text: '' };
-                        var text_part = r.text.replace(/[\r\n]/g,'.'); //for some reason IE doesn't always count the \n and \r in the length
-                        var text_whole = e.value.replace(/[\r\n]/g,'.');
-                        var the_start = text_whole.indexOf(text_part,tr.text.length);
-                        return { start: the_start, end: the_start + text_part.length, length: text_part.length, text: r.text };
-                    }
-
-                    var tr_beginning = el.createTextRange();
-                    var tr_selection = tr_beginning.duplicate();
-
-                    tr_selection.moveToBookmark(sr.getBookmark());
-                    tr_beginning.setEndPoint('EndToStart', tr_selection);
-
-                    console.log('tr_beginning.text = ', tr_beginning.text);
-                    console.log('tr_selection.text = ', tr_selection.text);
-
-//                    logger.each(tr_beginning, 'tr_beginning');
-//                    logger.each(tr_selection, 'tr_selection');
-
-                    var text_selected_fixed = sr.text.replace(/[\r\n]/g, '.'); // for some reason IE doesn't always count the \n and \r in the length
-                    var text_entire_fixed = el.value.replace(/[\r\n]/g, '.');
-
-//                    range.start = Math.max(text_entire_fixed.indexOf(text_selected_fixed, tr_selection.text.length), 0);
-                    range.start = tr_beginning.text.length;
-                    range.end = range.start + text_selected_fixed.length;
-
-                    range.length = text_selected_fixed.length;
-                    range.text = sr.text;
-
-                    if(range.length === 0) {
-                        range.start = range.end = this.caret();
-                    }
-
-                    console.log('$(', el, ').range() = {');
-                    console.log('    start: ',   range.start);
-                    console.log('    end: ',     range.end);
-                    console.log('    length: ',  range.length);
-                    console.log('    text: "',   range.text, '"');
-                    console.log('};');
-
-                    console.log(' ');
-                    console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-                    console.log(' ');
-                }
-
-                return range;
+				var input = $inputs.get(0);
+                return _getInputRange(input);
             }
             // setRange(startPos, endPos)
-            // From http://parentnode.org/javascript/working-with-the-cursor-position/
-            //      http://stackoverflow.com/a/2966703/467582
-            else if (typeof arguments[0] === 'number' && /^\d+$/.test(arguments[0])) {
-                if (!valid) {
-                    return this;
-                }
-
-                var startPos = arguments[0] * 1,
-                    endPos = arguments[1] * 1;
-
-                console.warn('setRange: ', startPos, ', ', endPos);
-
-//                el.focus();
-
-                // Mozilla, et al.
-                if (features.setSelectionRange) {
-                    el.setSelectionRange(startPos, endPos);
-                }
-                // IE
-                else if (features.createTextRange) {
-                    // v1
-//                    range = el.createTextRange();
-//                    range.collapse(true);
-//                    range.moveStart('character', startPos);
-//                    range.moveEnd('character', endPos);
-//                    range.select();
-
-                    // v2
-
-                    var tr = el.createTextRange();
-
-                    // Fix IE from counting the newline characters as two separate characters
-                    var stop_it = startPos;
-
-                    for (var i = 0; i < stop_it; i++) {
-                        if (el.value.substr(i, 1).search(/[\r\n]/) != -1) {
-                            startPos = startPos - .5;
-                        }
-                    }
-
-                    stop_it = endPos;
-
-                    for (i = 0; i < stop_it; i++) {
-                        if (el.value.substr(i, 1).search(/[\r\n]/) != -1) {
-                            endPos = endPos - .5;
-                        }
-                    }
-
-                    tr.moveEnd('textedit', -1);
-                    tr.moveStart('character', startPos);
-                    tr.moveEnd('character', endPos - startPos);
-                    tr.select();
-                }
+            else if ($.isNumeric(arguments[0])) {
+				var startPos = Math.floor(arguments[0]),
+					endPos = Math.floor(arguments[1]);
+				return this.each(function(_i, input) {
+					_setInputRange(input, startPos, endPos);
+				});
             }
             // replaceRange(text)
-            // From http://parentnode.org/javascript/working-with-the-cursor-position/
             else {
-                if (!valid) {
-                    return this;
-                }
-
-                var oldValue = $el.val();
-                var replacementText = arguments[0];
-                var selection = this.range();
-
-                // TODO: This commented-out section throws an error in IE7
-                var newLength = (selection.start + replacementText.length + (oldValue.length - selection.end)) * 1;
-                var maxLength = $el.attr('maxlength') * 1;
-
-                // TODO: is there a better way to implement this?
-                if($el.is('[maxlength]') && newLength > maxLength) {
-                    var delta = replacementText.length - (newLength - maxLength);
-                    replacementText = replacementText.substr(0, delta);
-                }
-
-                // Now that we know what the user selected, we can replace it
-                var startText = oldValue.substr(0, selection.start);
-                var endText = oldValue.substr(selection.end);
-                $el.val(startText + replacementText + endText);
-
-                // Reset the selection
-                var startPos = selection.start;
-                var endPos = startPos + replacementText.length;
-
-                console.info('restore selection startPos = ', startPos, ', endPos = ', endPos);
-
-                this.range(selection.length ? startPos : endPos, endPos);
+				var text = arguments[0];
+				return this.each(function(_i, input) {
+					_replaceInputRange(input, text);
+				});
             }
+        },
 
-            return this;
-        }
+		highlight: function() {
+			return this.each(function(_i, elem) {
+				_highlight(elem);
+			});
+		}
 
     });
-})(jQuery);
+}(jQuery));
