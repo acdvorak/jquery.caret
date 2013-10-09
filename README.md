@@ -1,10 +1,12 @@
 jQuery Caret Plugin
 ===================
 
-Cross-browser jQuery plugin that allows you to manipulate the cursor position and selection range
-of ```<input>``` and ```<textarea>``` elements.
+## v1.1.0
 
-Works in IE 6+, Firefox, Chrome, and Safari.
+Cross-browser jQuery plugin that allows you to manipulate the cursor position and selection range
+of ```<input>``` and ```<textarea>``` elements, as well as highlight text on the page.
+
+Tested in IE8+, Firefox, Chrome, and Safari.  May work in IE 6-7 but has not been tested.
 
 Features
 ========
@@ -17,7 +19,9 @@ Features
 API
 ===
 
-## ```$.fn.caret()```
+## Caret
+
+```$.fn.caret()```
 
 Interrogate and manipulate the cursor position of an input field at a single point without selecting any text.
 
@@ -37,7 +41,9 @@ Insert text at the current cursor position of the first matched element and plac
 
 *   ```text``` ```String```: Text to insert at the current cursor position.
 
-## ```$.fn.range()```
+## Range
+
+```$.fn.range()```
 
 Interrogate and manipulate the selected range of an input field.
 
@@ -58,6 +64,14 @@ Set the selection range of the first matched element.
 Replace the currently selected text of the first matched element with the given text and select the newly inserted text.
 
 *   ```text``` ```{String}```: Text to replace the current selection with.
+
+## Highlight
+
+```$.fn.highlight()```
+
+Highlights (selects) all text in child-bearing elements (e.g., ```<span>```, ```<div>```, but not ```<input>``` or ```<br/>```).
+
+### ```.highlight()``` returns ```jQuery```
 
 Gotchas
 =======
