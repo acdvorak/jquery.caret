@@ -1,4 +1,4 @@
-/*! jQuery Caret plugin v1.0.0 | (c) 2012, 2013 Andrew C. Dvorak | github.com/acdvorak/jquery.caret */
+/*! jQuery Caret plugin v1.1.0 | (c) 2012, 2013 Andrew C. Dvorak | github.com/acdvorak/jquery.caret */
 (function($, undefined) {
 
     var _input = document.createElement('input');
@@ -286,7 +286,7 @@
 
 	/**
 	 * Select all text in the given element.
-	 * @param {HTMLElement} elem Any element other than an input or textarea.
+	 * @param {HTMLElement} elem Any block or inline element other than a form element.
 	 */
 	var _highlight = function(elem) {
 		// Mozilla, et al.
@@ -302,16 +302,28 @@
     $.fn.extend({
 
         /**
-         * Usage: // Get position
-         *        var pos = $('input:first').caret()
-         *
-         *        // Set position
-         *        $('input:first').caret(15)
-         *
-         *        // Insert text at current position
-         *        $('input:first').caret("Some text")
+		 * Gets or sets the position of the caret or inserts text at the current caret position in an input or textarea element.
+		 * @returns {Number|jQuery} The current caret position if invoked as a getter (with no arguments)
+		 * or this jQuery object if invoked as a setter or inserter.
+		 * @see http://web.archive.org/web/20080704185920/http://parentnode.org/javascript/working-with-the-cursor-position/
+		 * @since 1.0.0
+         * @example
+		 * <pre>
+		 *    // Get position
+         *    var pos = $('input:first').caret();
+		 * </pre>
+         * @example
+		 * <pre>
+         *    // Set position
+         *    $('input:first').caret(15);
+		 * </pre>
+         * @example
+		 * <pre>
+         *    // Insert text at current position
+         *    $('input:first').caret('Some text');
+		 * </pre>
          */
-        caret: function () {
+        caret: function() {
 			var $inputs = this.filter('input, textarea');
 
 			// getCaret()
@@ -335,6 +347,28 @@
             }
         },
 
+		/**
+		 * Gets or sets the selection range or replaces the currently selected text in an input or textarea element.
+		 * @returns {Range|jQuery} The current selection range if invoked as a getter (with no arguments)
+		 * or this jQuery object if invoked as a setter or replacer.
+		 * @see http://stackoverflow.com/a/2966703/467582
+		 * @since 1.0.0
+		 * @example
+		 * <pre>
+		 *    // Get selection range
+		 *    var range = $('input:first').range();
+		 * </pre>
+		 * @example
+		 * <pre>
+		 *    // Set selection range
+		 *    $('input:first').range(15, 20);
+		 * </pre>
+		 * @example
+		 * <pre>
+		 *    // Replace the currently selected text
+		 *    $('input:first').range('Replacement text');
+		 * </pre>
+		 */
         range: function() {
 			var $inputs = this.filter('input, textarea');
 
@@ -360,6 +394,17 @@
             }
         },
 
+		/**
+		 * Highlights (selects) all text in each element of this jQuery object.
+		 * @returns {jQuery} This jQuery object
+		 * @see http://stackoverflow.com/a/11128179/467582
+		 * @since 1.1.0
+		 * @example
+		 * <pre>
+		 *     // Highlight the contents of span elements when clicked
+		 *     $('span').on('click', function() { $(this).highlight(); });
+		 * </pre>
+		 */
 		highlight: function() {
 			return this.each(function(_i, elem) {
 				_highlight(elem);
