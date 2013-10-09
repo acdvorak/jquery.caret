@@ -22,7 +22,7 @@ API
 
 ## Caret
 
-```$.fn.caret()```
+    $.fn.caret()
 
 Interrogate and manipulate the cursor position of an input field at a single point without selecting any text.
 
@@ -44,7 +44,7 @@ Insert text at the current cursor position of the first matched element and plac
 
 ## Range
 
-```$.fn.range()```
+    $.fn.range()
 
 Interrogate and manipulate the selected range of an input field.
 
@@ -68,7 +68,7 @@ Replace the currently selected text of the first matched element with the given 
 
 ## Highlight
 
-```$.fn.highlight()```
+    $.fn.highlight()
 
 Highlights (selects) all text in child-bearing elements (e.g., ```<span>```, ```<div>```, but not ```<input>``` or ```<br/>```).
 
