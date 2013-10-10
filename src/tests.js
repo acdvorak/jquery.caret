@@ -1,14 +1,5 @@
 (function() {
 
-	var _support = {
-		normalizesNewlines: (function () {
-			var textarea = document.createElement('textarea');
-			var text = 'abc\r\ndef';
-			textarea.value = text;
-			return textarea.value.length === text.length - 1;
-		}())
-	};
-
 	/**
 	 * Normalizes line endings by removing all \r (carriage return) characters.
 	 * In IE, newlines in textareas are stored as \r\n instead of just \n, which screws up length calculations.
@@ -26,6 +17,15 @@
 	});
 
 	pavlov.specify('jQuery Caret Plugin', function() {
+
+		var _support = {
+			normalizesNewlines: (function () {
+				var textarea = _e('textarea');
+				var text = 'abc\r\ndef';
+				textarea.value = text;
+				return textarea.value.length === text.length - 1;
+			}())
+		};
 
 		var $fixture = $('#qunit-fixture');
 
