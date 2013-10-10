@@ -355,7 +355,7 @@
 				return _getCaret(input);
             }
             // setCaret(position)
-            else if ($.isNumeric(arguments[0])) {
+            else if (typeof arguments[0] === 'number') {
 				var pos = Math.floor(arguments[0]);
 				return this.each(function(_i, input) {
 					_setCaret(input, pos);
@@ -401,7 +401,7 @@
                 return _getInputRange(input);
             }
             // setRange(startPos, endPos)
-            else if ($.isNumeric(arguments[0])) {
+            else if (typeof arguments[0] === 'number') {
 				var startPos = Math.floor(arguments[0]),
 					endPos = Math.floor(arguments[1]);
 				return this.each(function(_i, input) {
