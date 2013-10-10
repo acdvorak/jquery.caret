@@ -156,8 +156,8 @@
 						});
 
 						it("Converts floating point values to integers", function() {
-							assert($textarea.val(text).caret(1.5).caret()).equals(1.0);
-							assert($textarea.val(text).caret(2.5).caret()).equals(2.0);
+							assert($textarea.val(text).caret(1.5).caret()).equals(1);
+							assert($textarea.val(text).caret(2.5).caret()).equals(2);
 						});
 					});
 				});
