@@ -53,10 +53,9 @@
 
 			describe('Caret', function() {
 				describe('Get', function() {
-					// Note: Every browser handles caret placement a little differently.
-					// Chrome always places the caret at the END of an <input>, but at the BEGINNING of a <textarea>;
-					//
-					// which means our tests need to accommodate both placement strategies.
+					// Note: Every browser handles automatic caret placement a little differently,
+					// which means our tests need to accommodate both placement strategies
+					// (at the beginning and end of the input/textarea).
 
 					it("Returns undefined when the jQuery object does not contain an input or textarea element", function() {
 						assert($().caret()).isUndefined();
