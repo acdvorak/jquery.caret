@@ -18,6 +18,10 @@
 
 	pavlov.specify('jQuery Caret Plugin', function() {
 
+		var _e = function(tagName) {
+			return document.createElement(tagName);
+		};
+
 		var _support = {
 			normalizesNewlines: (function () {
 				var textarea = _e('textarea');
@@ -53,6 +57,13 @@
 					// Chrome always places the caret at the END of an <input>, but at the BEGINNING of a <textarea>;
 					//
 					// which means our tests need to accommodate both placement strategies.
+
+					it("Returns undefined when the jQuery object does not contain an input or textarea element", function() {
+						assert($().caret()).isUndefined();
+						assert($({}).caret()).isUndefined();
+						assert($('<div/>').caret()).isUndefined();
+						assert($([ _e('span'), _e('div'), _e('button') ]).caret()).isUndefined();
+					});
 
 					describe('<input>', function() {
 						it("Returns zero (0) when no value has been set", function() {
