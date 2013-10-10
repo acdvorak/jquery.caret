@@ -48,7 +48,7 @@
 			// plugins:
 
 			describe('Caret', function() {
-				describe('Getter', function() {
+				describe('Get', function() {
 					// Note: Every browser handles caret placement a little differently.
 					// Chrome always places the caret at the END of an <input>, but at the BEGINNING of a <textarea>;
 					//
@@ -103,7 +103,7 @@
 					});
 				});
 
-				describe('Setter', function() {
+				describe('Set', function() {
 					describe('<input>', function() {
 						var text = _single,
 							len = text.length,
