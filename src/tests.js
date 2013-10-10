@@ -160,6 +160,8 @@
 							assert($textarea.val(text).caret(2.5).caret()).equals(2);
 						});
 					});
+
+					it("Accepts negative positions");
 				});
 
 				describe('Insert', function() {
