@@ -65,6 +65,24 @@
 					});
 
 					describe('<input>', function() {
+						it("Returns the caret position of the first input or textarea element in the jQuery object", function() {
+							var span = _e('span'),
+								div = _e('div'),
+								button = _e('button');
+
+							// IE throws a hissy fit if the inputs aren't inserted into the DOM before calling
+							// .focus(), .createTextRange(), etc.
+							var input3 = $('<input/>').appendTo($fixture).val('abc').caret(3)[0],
+								input4 = $('<input/>').appendTo($fixture).val('defg').caret(4)[0],
+								input5 = $('<input/>').appendTo($fixture).val('12345').caret(5)[0];
+
+							assert($([ span, div, button, input3 ]).caret()).equals(3);
+							assert($([ input3, input4, input5 ]).caret()).equals(3);
+							assert($([ input5, input4, input3 ]).caret()).equals(5);
+						});
+					});
+
+					describe('<input>', function() {
 						it("Returns zero (0) when no value has been set", function() {
 							assert($input.caret()).equals(0);
 						});
