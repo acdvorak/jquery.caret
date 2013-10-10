@@ -357,17 +357,19 @@
             // setCaret(position)
             else if (typeof arguments[0] === 'number') {
 				var pos = Math.floor(arguments[0]);
-				return this.each(function(_i, input) {
+				$inputs.each(function(_i, input) {
 					_setCaret(input, pos);
 				});
             }
             // insertAtCaret(text)
             else {
 				var text = arguments[0];
-				return this.each(function(_i, input) {
+				$inputs.each(function(_i, input) {
 					_insertAtCaret(input, text);
 				});
             }
+
+			return this;
         },
 
 		/**
@@ -404,17 +406,19 @@
             else if (typeof arguments[0] === 'number') {
 				var startPos = Math.floor(arguments[0]),
 					endPos = Math.floor(arguments[1]);
-				return this.each(function(_i, input) {
+				$inputs.each(function(_i, input) {
 					_setInputRange(input, startPos, endPos);
 				});
             }
             // replaceRange(text)
             else {
 				var text = arguments[0];
-				return this.each(function(_i, input) {
+				$inputs.each(function(_i, input) {
 					_replaceInputRange(input, text);
 				});
             }
+
+			return this;
         },
 
 		/**
