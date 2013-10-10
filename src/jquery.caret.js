@@ -23,22 +23,45 @@
 		return input.selectionStart;
 	};
 
+	/**
+	 * @see http://stackoverflow.com/q/6943000/467582
+	 */
 	var _getCaretIE = function(input) {
+		var caret, normalizedValue, range, textInputRange, len, endRange;
+
+		// Yeah, you have to focus twice for IE 7 and 8.  *cries*
+		input.focus();
 		input.focus();
 
-		var r = document.selection.createRange();
+		range = document.selection.createRange();
 
-		if (r == null) {
-			return 0;
+		if (range && range.parentElement() == input) {
+			len = input.value.length;
+			normalizedValue = input.value.replace(/\r\n/g, '');
+
+			// Create a working TextRange that lives only in the input
+			textInputRange = input.createTextRange();
+			textInputRange.moveToBookmark(range.getBookmark());
+
+			// Check if the start and end of the selection are at the very end
+			// of the input, since moveStart/moveEnd doesn't return what we want
+			// in those cases
+			endRange = input.createTextRange();
+			endRange.collapse(false);
+
+			if (textInputRange.compareEndPoints("StartToEnd", endRange) > -1) {
+				caret = input.value.replace(/\r\n/g, '\n').length;
+			} else {
+				caret = -textInputRange.moveStart("character", -len);
+				caret += normalizedValue.slice(0, caret).split("\n").length - 1;
+			}
+
+			return caret;
 		}
 
-		var tr1 = input.createTextRange();
-		var tr2 = tr1.duplicate();
+		alert("Your browser is incredibly stupid.  I don't know what else to say.");
 
-		tr1.moveToBookmark(r.getBookmark());
-		tr2.setEndPoint('EndToStart', tr1);
-
-		return tr2.text.length;
+		return 0;
 	};
 
 	/**
