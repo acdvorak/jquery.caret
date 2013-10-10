@@ -161,6 +161,31 @@
 						});
 					});
 				});
+
+				describe('Insert', function() {
+					describe('<input>', function() {
+						it("Prepends text", function() {
+							assert($input.val('abc').caret(0).caret('123').val()).equals('123abc');
+						});
+
+						it("Appends text", function() {
+							assert($input.val('abc').caret(3).caret('123').val()).equals('abc123');
+						});
+
+						it("Inserts text", function() {
+							assert($input.val('abcdef').caret(3).caret('123').val()).equals('abc123def');
+						});
+
+						it("Respects maxlength attribute", function() {
+							$input.attr('maxlength', 5);
+							assert($input.val('abc').caret(0).caret('123').val()).equals('12abc');
+							assert($input.val('abc').caret(3).caret('123').val()).equals('abc12');
+							assert($input.val('abcde').caret(0).caret('123').val()).equals('abcde');
+							assert($input.val('abcde').caret(3).caret('123').val()).equals('abcde');
+							assert($input.val('abcde').caret(5).caret('123').val()).equals('abcde');
+						});
+					});
+				});
 			});
 		});
 
