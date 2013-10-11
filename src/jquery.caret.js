@@ -72,7 +72,7 @@
 
         range = document.selection.createRange();
 
-        if (range && range.parentElement() == input) {
+        if (range && range.parentElement() === input) {
             len = input.value.length;
             normalizedValue = input.value.replace(_rNewlineIE, '');
 
