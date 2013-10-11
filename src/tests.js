@@ -275,6 +275,7 @@
                     describe('<textarea>', function() {
                         it("Returns the correct range", function() {
                             assert(_s($textarea.val('abc\ndef').range(0, 7).range())).equals(_s({ start: 0, end: 7, length: 7, text: 'abc\ndef' }));
+                            assert(_s($textarea.val('abc\ndef').range(2, 5).range())).equals(_s({ start: 2, end: 5, length: 3, text: 'c\nd' }));
                             assert(_s($textarea.val('abc\ndef').range(3, 4).range())).equals(_s({ start: 3, end: 4, length: 1, text: '\n' }));
                         });
                     });

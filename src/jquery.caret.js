@@ -198,26 +198,23 @@
 
         input.focus();
 
-        var sr = document.selection.createRange();
+        var selection = document.selection.createRange();
 
-        if (!sr) {
+        if (!selection) {
             return range;
         }
 
         var tr_beginning = input.createTextRange();
         var tr_selection = tr_beginning.duplicate();
 
-        tr_selection.moveToBookmark(sr.getBookmark());
+        tr_selection.moveToBookmark(selection.getBookmark());
         tr_beginning.setEndPoint('EndToStart', tr_selection);
 
-        var text_selected_fixed = sr.text.replace(_rNewlineChars, '.'); // for some reason IE doesn't always count the \n and \r in the length
-        var text_entire_fixed = input.value.replace(_rNewlineChars, '.');
+        range.start = tr_beginning.text.replace(_rNewlineIE, '\n').length;
+        range.text = selection.text.replace(_rNewlineIE, '\n').replace(_rCarriageReturn, '\n');
 
-        range.start = tr_beginning.text.length;
-        range.end = range.start + text_selected_fixed.length;
-
-        range.length = text_selected_fixed.length;
-        range.text = sr.text;
+        range.length = range.text.length;
+        range.end = range.start + range.length;
 
         if(range.length === 0) {
             range.start = range.end = _getCaret(input);
@@ -262,16 +259,16 @@
         var stop_it = startPos;
 
         for (i = 0; i < stop_it; i++) {
-            if (input.value.substr(i, 1).search(_rNewlineChars) !== -1) {
-                startPos = startPos - 0.5;
+            if (input.value.substr(i, 1).search(_rNewlineIE) !== -1) {
+                startPos = startPos - 1;
             }
         }
 
         stop_it = endPos;
 
         for (i = 0; i < stop_it; i++) {
-            if (input.value.substr(i, 1).search(_rNewlineChars) !== -1) {
-                endPos = endPos - 0.5;
+            if (input.value.substr(i, 1).search(_rNewlineIE) !== -1) {
+                endPos = endPos - 1;
             }
         }
 
