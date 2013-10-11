@@ -138,8 +138,8 @@ Types
         text: String
     }
 
-Gotchas
-=======
+Technical Notes
+===============
 
 *   Line Endings (a.k.a. newlines)
 
@@ -157,33 +157,27 @@ Gotchas
 
     > When submitting the form, all browsers canonicalize newlines to ```\r\n``` (```%0D%0A``` in URL encoding).
 
-    ```.caret()``` and ```.range()``` do not normalize line endings, so the following code will behave differently
-    in IE than it does in all other browsers:
+    ```.caret()``` and ```.range()``` smooth out these differences for you by normalizing line endings so they
+    behave properly in all browsers.  More specifically, they strip ```\r``` characters so that newlines are always
+    represented by a single ```\n``` character.  As a result, positioning the caret before or after a newline
+    always works the way you expect it to without any fuss.
+
+    **IMPORTANT**: **_Always_** access input/textarea values using jQuery's ```.val()``` method instead.
+    **_DO NOT_** use the browser's native ```.value``` property.  Doing so will bypass newline normalization
+    and return strings containing ```\r``` in IE and Opera which will almost certainly screw up length and
+    position calculations.
+
+    Here's a quick test you can do to see if your browser normalizes line endings to ```\n```:
 
     ```javascript
-    var $textarea = $('textarea');
-    $textarea.val('Line 1\nLine 2');
-
-    // All browsers: "ine 1"
-    console.log($textarea.range(1, 6).range().text);
-
-    // Internet Explorer:  "ine 1"
-    // All other browsers: "ine 1\n"
-    console.log($textarea.range(1, 7).range().text);
-
-    // Internet Explorer:  "ine 1"
-    // All other browsers: "ine 1\nL"
-    console.log($textarea.range(1, 8).range().text);
-
-    // Internet Explorer:  "ine 1\r\nL"
-    // All other browsers: "ine 1\nLi"
-    console.log($textarea.range(1, 9).range().text);
+    // true in Chrome, Safari, and Firefox
+    // false in IE and Opera on Windows
+    var normalizesNewlines = (function () {
+        var textarea = document.createElement('textarea');
+        textarea.value = '\r\n';
+        return textarea.value === '\n';
+    }());
     ```
-
-TODO
-====
-
-*  Verify assertions about normalizing line endings in "Gotchas" section
 
 License
 =======
