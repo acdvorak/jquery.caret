@@ -11,6 +11,27 @@
     var _rNewlineIE = /[\r\n]/g,
         _rCarriageReturn = /[\r]/g;
 
+    var _format = function() {
+        var str = arguments[0];
+        var args = [].slice.call(arguments, 1);
+        return str.replace(/{(\d+)}/g, function(match, number) {
+            return typeof(args[number]) !== 'undefined'
+                ? args[number]
+                : match
+                ;
+        });
+    };
+
+    var _getIndex = function(input, pos) {
+        // Negative index counts backward from the end of the input/textarea's value
+        if (pos < 0) {
+            var norm = input.value.replace(_rCarriageReturn, '');
+            var len = norm.length;
+            pos = len + pos;
+        }
+        return pos;
+    };
+
     /**
      * @class
      * @constructor
@@ -109,12 +130,7 @@
     var _setCaret = function(input, pos) {
         input.focus();
 
-        // Negative index counts backward from the end of the input/textarea's value
-        if (pos < 0) {
-            var norm = input.value.replace(_rCarriageReturn, '');
-            var len = norm.length;
-            pos = len + pos;
-        }
+        pos = _getIndex(input, pos);
 
         // Mozilla, et al.
         if (_support.setSelectionRange) {
@@ -260,6 +276,9 @@
      * @see http://stackoverflow.com/a/2966703/467582
      */
     var _setInputRange = function(input, startPos, endPos) {
+        startPos = _getIndex(input, startPos);
+        endPos = _getIndex(input, endPos);
+
         // Mozilla, et al.
         if (_support.setSelectionRange) {
             _setInputRangeW3(input, startPos, endPos);
@@ -413,7 +432,6 @@
                 return _getInputRange(input);
             }
             // TODO: Allow single argument (w/ implied endPos = value.length)
-            // TODO: Handle negative indexes
             // setRange(startPos, endPos)
             else if (typeof arguments[0] === 'number') {
                 var startPos = Math.floor(arguments[0]),
