@@ -354,6 +354,7 @@
                 var input = $inputs.get(0);
                 return _getCaret(input);
             }
+            // TODO: Handle negative indexes
             // setCaret(position)
             else if (typeof arguments[0] === 'number') {
                 var pos = Math.floor(arguments[0]);
@@ -402,6 +403,8 @@
                 var input = $inputs.get(0);
                 return _getInputRange(input);
             }
+            // TODO: Allow single argument (w/ implied endPos = value.length)
+            // TODO: Handle negative indexes
             // setRange(startPos, endPos)
             else if (typeof arguments[0] === 'number') {
                 var startPos = Math.floor(arguments[0]),
