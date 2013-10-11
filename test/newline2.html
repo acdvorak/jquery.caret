@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Newline test - $.fn.caret() and $.fn.range()</title>
+        <style>
+            *, *:before, *:after {
+                -moz-box-sizing: border-box;
+                -webkit-box-sizing: border-box;
+                box-sizing: border-box;
+            }
+            textarea {
+                width: 100%;
+                height: 10em;
+            }
+        </style>
+    </head>
+    <body>
+        <p>Caret position: <b id="pos">...</b></p>
+        <textarea></textarea>
+
+        <script src="../lib/jquery/core/jquery-1.10.0.js"></script>
+        <script src="../lib/qunit/qunit-1.12.0.js"></script>
+        <script src="../lib/qunit/pavlov-0.4.0pre.js"></script>
+        <script src="../src/jquery.caret.js"></script>
+
+        <script src="../lib/es5-shim-2.1.0.js"></script>
+        <script src="../lib/json2.js"></script>
+
+        <script>
+            String.prototype.visualizeNewlines = function() {
+                return this.replace(/\n/g, '\\n').replace(/\r/g, '\\r');
+            };
+
+            $(function() {
+                var lineNumbers = [ 1, 2, 3, 4 ];
+                var lines = $.map(lineNumbers,function (val) { return 'Line ' + val; });
+                var text = lines.join('\n');
+
+                var $textarea = $('textarea');
+                var $pos = $('#pos');
+
+                $textarea.val(text);
+
+                $textarea.on('keydown keyup keypress change click', function() {
+                	$pos.text($textarea.caret());
+                });
+
+                setInterval(function() {
+                    var curCaret = $textarea.caret(),
+                        newCaret = curCaret + 1;
+                    if (curCaret >= $textarea.val().length)
+                        newCaret = 0;
+                    $textarea.caret(newCaret).click();
+                }, 1000);
+            });
+        </script>
+    </body>
+</html>
