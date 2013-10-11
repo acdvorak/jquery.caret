@@ -372,6 +372,7 @@
          * <pre>
          *    // Set position
          *    $('input:first').caret(15);
+         *    $('input:first').caret(-3);
          * </pre>
          * @example
          * <pre>
@@ -420,8 +421,10 @@
          * @example
          * <pre>
          *    // Set selection range
-         *    $('input:first').range(15, 20);
          *    $('input:first').range(15);
+         *    $('input:first').range(15, 20);
+         *    $('input:first').range(-3);
+         *    $('input:first').range(-8, -3);
          * </pre>
          * @example
          * <pre>
