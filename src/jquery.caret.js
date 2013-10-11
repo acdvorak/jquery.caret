@@ -40,6 +40,10 @@
         return pos;
     };
 
+    var _hasAttr = function(input, attrName) {
+        return input.hasAttribute ? input.hasAttribute(attrName) : (typeof(input[attrName]) !== 'undefined');
+    };
+
     /**
      * @class
      * @constructor
@@ -160,7 +164,7 @@
         var newLength = +(curPos + text.length + (input.value.length - curPos));
         var maxLength = +input.getAttribute('maxlength');
 
-        if(input.hasAttribute('maxlength') && newLength > maxLength) {
+        if(_hasAttr(input, 'maxlength') && newLength > maxLength) {
             var delta = text.length - (newLength - maxLength);
             text = text.substr(0, delta);
         }
