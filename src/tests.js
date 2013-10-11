@@ -273,6 +273,15 @@
             describe('Range', function() {
                 describe('Get', function () {
                     describe('<textarea>', function() {
+                        it("Handles zero-length selections", function() {
+                            assert(_s($textarea.val('abc\ndef').range(0, 0).range())).equals(_s({ start: 0, end: 0, length: 0, text: '' }));
+                            assert(_s($textarea.val('abc\ndef').range(1, 1).range())).equals(_s({ start: 1, end: 1, length: 0, text: '' }));
+                            assert(_s($textarea.val('abc\ndef').range(3, 3).range())).equals(_s({ start: 3, end: 3, length: 0, text: '' }));
+                            assert(_s($textarea.val('abc\ndef').range(4, 4).range())).equals(_s({ start: 4, end: 4, length: 0, text: '' }));
+                            assert(_s($textarea.val('abc\ndef').range(5, 5).range())).equals(_s({ start: 5, end: 5, length: 0, text: '' }));
+                            assert(_s($textarea.val('abc\ndef').range(7, 7).range())).equals(_s({ start: 7, end: 7, length: 0, text: '' }));
+                        });
+
                         it("Returns the correct range", function() {
                             assert(_s($textarea.val('abc\ndef').range(0, 7).range())).equals(_s({ start: 0, end: 7, length: 7, text: 'abc\ndef' }));
                             assert(_s($textarea.val('abc\ndef').range(2, 5).range())).equals(_s({ start: 2, end: 5, length: 3, text: 'c\nd' }));
