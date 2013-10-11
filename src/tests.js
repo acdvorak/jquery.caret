@@ -149,9 +149,14 @@
                             assert($input.val(text).caret(len).caret()).equals(len);
                         });
 
-                        it("Enforces start/end boundaries", function() {
-                            assert($input.val(text).caret(-1).caret()).equals(0);
+                        it("Enforces length boundary", function() {
                             assert($input.val(text).caret(len + 1).caret()).equals(len);
+                            assert($input.val(text).caret(len + 2).caret()).equals(len);
+                        });
+
+                        it("Allows negative position", function() {
+                            assert($input.val(text).caret(-1).caret()).equals(len - 1);
+                            assert($input.val(text).caret(-2).caret()).equals(len - 2);
                         });
 
                         it("Converts floating point values to integers", function() {
@@ -177,10 +182,14 @@
                             assert($textarea.val(text).caret(len).caret()).equals(len);
                         });
 
-                        it("Enforces start/end boundaries", function() {
-                            assert($textarea.val(text).caret(-1).caret()).equals(0);
+                        it("Enforces length boundary", function() {
                             assert($textarea.val(text).caret(len + 1).caret()).equals(len);
                             assert($textarea.val(text).caret(len + 2).caret()).equals(len);
+                        });
+
+                        it("Allows negative position", function() {
+                            assert($textarea.val(text).caret(-1).caret()).equals(len - 1);
+                            assert($textarea.val(text).caret(-2).caret()).equals(len - 2);
                         });
 
                         it("Converts floating point values to integers", function() {
@@ -188,8 +197,6 @@
                             assert($textarea.val(text).caret(2.5).caret()).equals(2);
                         });
                     });
-
-                    it("Accepts negative positions");
                 });
 
                 describe('Insert', function() {

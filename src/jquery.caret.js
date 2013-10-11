@@ -8,7 +8,8 @@
         createTextRange: ('createTextRange' in _input) || ('selection' in document)
     };
 
-    var _rNewlineIE = /[\r\n]/g;
+    var _rNewlineIE = /[\r\n]/g,
+        _rCarriageReturn = /[\r]/g;
 
     /**
      * @class
@@ -107,6 +108,13 @@
      */
     var _setCaret = function(input, pos) {
         input.focus();
+
+        // Negative index counts backward from the end of the input/textarea's value
+        if (pos < 0) {
+            var norm = input.value.replace(_rCarriageReturn, '');
+            var len = norm.length;
+            pos = len + pos;
+        }
 
         // Mozilla, et al.
         if (_support.setSelectionRange) {
@@ -356,7 +364,6 @@
                 var input = $inputs.get(0);
                 return _getCaret(input);
             }
-            // TODO: Handle negative indexes
             // setCaret(position)
             else if (typeof arguments[0] === 'number') {
                 var pos = Math.floor(arguments[0]);
