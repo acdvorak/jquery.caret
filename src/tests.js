@@ -29,9 +29,8 @@
         var _support = {
             normalizesNewlines: (function () {
                 var textarea = _e('textarea');
-                var text = 'abc\r\ndef';
-                textarea.value = text;
-                return textarea.value.length === text.length - 1;
+                textarea.value = '\r\n';
+                return textarea.value === '\n';
             }())
         };
 
