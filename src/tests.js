@@ -263,6 +263,15 @@
                         });
                     });
                 });
+
+                describe('Set', function () {
+                    describe('<textarea>', function() {
+                        it("Accepts a single argument", function() {
+                            assert(_s($textarea.val('abc\ndef').range(0).range())).equals(_s($textarea.val('abc\ndef').range(0, 7).range()));
+                            assert(_s($textarea.val('abc\ndef').range(3).range())).equals(_s($textarea.val('abc\ndef').range(3, 7).range()));
+                        });
+                    });
+                });
             });
         });
 

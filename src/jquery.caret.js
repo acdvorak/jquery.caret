@@ -23,12 +23,20 @@
     };
 
     var _getIndex = function(input, pos) {
+        var norm = input.value.replace(_rCarriageReturn, '');
+        var len = norm.length;
+
+        if (typeof(pos) === 'undefined') {
+            pos = len;
+        }
+
+        pos = Math.floor(pos);
+
         // Negative index counts backward from the end of the input/textarea's value
         if (pos < 0) {
-            var norm = input.value.replace(_rCarriageReturn, '');
-            var len = norm.length;
             pos = len + pos;
         }
+
         return pos;
     };
 
@@ -129,8 +137,6 @@
      */
     var _setCaret = function(input, pos) {
         input.focus();
-
-        pos = _getIndex(input, pos);
 
         // Mozilla, et al.
         if (_support.setSelectionRange) {
@@ -276,9 +282,6 @@
      * @see http://stackoverflow.com/a/2966703/467582
      */
     var _setInputRange = function(input, startPos, endPos) {
-        startPos = _getIndex(input, startPos);
-        endPos = _getIndex(input, endPos);
-
         // Mozilla, et al.
         if (_support.setSelectionRange) {
             _setInputRangeW3(input, startPos, endPos);
@@ -385,8 +388,9 @@
             }
             // setCaret(position)
             else if (typeof arguments[0] === 'number') {
-                var pos = Math.floor(arguments[0]);
+                var arg0 = arguments[0];
                 $inputs.each(function(_i, input) {
+                    var pos = _getIndex(input, arg0);
                     _setCaret(input, pos);
                 });
             }
@@ -416,6 +420,7 @@
          * <pre>
          *    // Set selection range
          *    $('input:first').range(15, 20);
+         *    $('input:first').range(15);
          * </pre>
          * @example
          * <pre>
@@ -431,12 +436,13 @@
                 var input = $inputs.get(0);
                 return _getInputRange(input);
             }
-            // TODO: Allow single argument (w/ implied endPos = value.length)
             // setRange(startPos, endPos)
             else if (typeof arguments[0] === 'number') {
-                var startPos = Math.floor(arguments[0]),
-                    endPos = Math.floor(arguments[1]);
+                var arg0 = arguments[0];
+                var arg1 = arguments[1];
                 $inputs.each(function(_i, input) {
+                    var startPos = _getIndex(input, arg0),
+                        endPos = _getIndex(input, arg1);
                     _setInputRange(input, startPos, endPos);
                 });
             }
