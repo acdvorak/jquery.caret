@@ -8,8 +8,9 @@
         createTextRange: ('createTextRange' in _input) || ('selection' in document)
     };
 
-    var _rNewlineIE = /[\r\n]/g,
-        _rCarriageReturn = /[\r]/g;
+    var _rNewlineChars = /[\r\n]/g,
+        _rNewlineIE = /\r\n/g,
+        _rCarriageReturn = /\r/g;
 
     var _format = function() {
         var str = arguments[0];
@@ -73,7 +74,7 @@
 
         if (range && range.parentElement() == input) {
             len = input.value.length;
-            normalizedValue = input.value.replace(/\r\n/g, '');
+            normalizedValue = input.value.replace(_rNewlineIE, '');
 
             // Create a working TextRange that lives only in the input
             textInputRange = input.createTextRange();
@@ -86,7 +87,7 @@
             endRange.collapse(false);
 
             if (textInputRange.compareEndPoints("StartToEnd", endRange) > -1) {
-                caret = input.value.replace(/\r\n/g, '\n').length;
+                caret = input.value.replace(_rNewlineIE, '\n').length;
             } else {
                 caret = -textInputRange.moveStart("character", -len);
                 caret += normalizedValue.slice(0, caret).split("\n").length - 1;
@@ -206,8 +207,8 @@
         tr_selection.moveToBookmark(sr.getBookmark());
         tr_beginning.setEndPoint('EndToStart', tr_selection);
 
-        var text_selected_fixed = sr.text.replace(_rNewlineIE, '.'); // for some reason IE doesn't always count the \n and \r in the length
-        var text_entire_fixed = input.value.replace(_rNewlineIE, '.');
+        var text_selected_fixed = sr.text.replace(_rNewlineChars, '.'); // for some reason IE doesn't always count the \n and \r in the length
+        var text_entire_fixed = input.value.replace(_rNewlineChars, '.');
 
         range.start = tr_beginning.text.length;
         range.end = range.start + text_selected_fixed.length;
@@ -258,7 +259,7 @@
         var stop_it = startPos;
 
         for (i = 0; i < stop_it; i++) {
-            if (input.value.substr(i, 1).search(_rNewlineIE) !== -1) {
+            if (input.value.substr(i, 1).search(_rNewlineChars) !== -1) {
                 startPos = startPos - 0.5;
             }
         }
@@ -266,7 +267,7 @@
         stop_it = endPos;
 
         for (i = 0; i < stop_it; i++) {
-            if (input.value.substr(i, 1).search(_rNewlineIE) !== -1) {
+            if (input.value.substr(i, 1).search(_rNewlineChars) !== -1) {
                 endPos = endPos - 0.5;
             }
         }
