@@ -298,7 +298,14 @@
                         });
                     });
 
-                    // TODO: Test $.fn.range(-3, -8)
+                    describe('<textarea>', function() {
+                        it("Accepts negative arguments", function() {
+                            assert(_s($textarea.val('abc\ndef').range(-4).range())).equals(_s($textarea.val('abc\ndef').range(3).range()));
+                            assert(_s($textarea.val('abc\ndef').range(0, -2).range())).equals(_s($textarea.val('abc\ndef').range(0, 5).range()));
+                            assert(_s($textarea.val('abc\ndef').range(3, -2).range())).equals(_s($textarea.val('abc\ndef').range(3, 5).range()));
+                            assert(_s($textarea.val('abc\ndef').range(-4, -2).range())).equals(_s($textarea.val('abc\ndef').range(3, 5).range()));
+                        });
+                    });
                 });
 
                 it("TODO: Test range positions AFTER replacement/insertion");
