@@ -36,11 +36,11 @@
      * @class
      * @constructor
      */
-    var Range = function() {
-        this.start = 0;
-        this.end = 0;
-        this.length = 0;
-        this.text = '';
+    var Range = function(start, end, length, text) {
+        this.start = start || 0;
+        this.end = end || 0;
+        this.length = length || 0;
+        this.text = text || '';
     };
 
     var _getCaretW3 = function(input) {
