@@ -38,7 +38,7 @@
         var $fixture = $('#qunit-fixture');
 
         var _single = 'abcdefghijklmnop',
-            _multi = 'abcdefg\r\nhijklmnop',
+            _multi = 'abcd\r\nefg\r\nhijk\r\nlm',
             _short = 'abc',
             _long = 'abcdefghijklmnopqrstuvwxyz',
             _empty = '';
@@ -138,11 +138,13 @@
                         it("Gets the same position that was set", function() {
                             assert($input.val(text).caret(0).caret()).equals(0);
                             assert($input.val(text).caret(1).caret()).equals(1);
+                            assert($input.val(text).caret(2).caret()).equals(2);
                             assert($input.val(text).caret(mid - 2).caret()).equals(mid - 2);
                             assert($input.val(text).caret(mid - 1).caret()).equals(mid - 1);
                             assert($input.val(text).caret(mid).caret()).equals(mid);
                             assert($input.val(text).caret(mid + 1).caret()).equals(mid + 1);
                             assert($input.val(text).caret(mid + 2).caret()).equals(mid + 2);
+                            assert($input.val(text).caret(len - 2).caret()).equals(len - 2);
                             assert($input.val(text).caret(len - 1).caret()).equals(len - 1);
                             assert($input.val(text).caret(len).caret()).equals(len);
                         });
@@ -166,16 +168,32 @@
                     describe('<textarea>', function() {
                         var text = _multi,
                             len = text.norm().length,
-                            mid = text.indexOf('\n');
+                            nl1 = text.norm().indexOf('\n'),
+                            nl2 = text.norm().lastIndexOf('\n');
 
                         it("Gets the same position that was set", function() {
                             assert($textarea.val(text).caret(0).caret()).equals(0);
                             assert($textarea.val(text).caret(1).caret()).equals(1);
-                            assert($textarea.val(text).caret(mid - 2).caret()).equals(mid - 2);
-                            assert($textarea.val(text).caret(mid - 1).caret()).equals(mid - 1);
-                            assert($textarea.val(text).caret(mid).caret()).equals(mid);
-                            assert($textarea.val(text).caret(mid + 1).caret()).equals(mid + 1);
-                            assert($textarea.val(text).caret(mid + 2).caret()).equals(mid + 2);
+                            assert($textarea.val(text).caret(2).caret()).equals(2);
+
+                            assert($textarea.val(text).caret(nl1 - 2).caret()).equals(nl1 - 2);
+                            assert($textarea.val(text).caret(nl1 - 1).caret()).equals(nl1 - 1);
+                            assert($textarea.val(text).caret(nl1).caret()).equals(nl1);
+                            assert($textarea.val(text).caret(nl1 + 1).caret()).equals(nl1 + 1);
+                            assert($textarea.val(text).caret(nl1 + 2).caret()).equals(nl1 + 2);
+
+                            assert($textarea.val(text).caret(nl2 - 2).caret()).equals(nl2 - 2);
+                            assert($textarea.val(text).caret(nl2 - 1).caret()).equals(nl2 - 1);
+                            assert($textarea.val(text).caret(nl2).caret()).equals(nl2);
+                            assert($textarea.val(text).caret(nl2 + 1).caret()).equals(nl2 + 1);
+                            assert($textarea.val(text).caret(nl2 + 2).caret()).equals(nl2 + 2);
+
+                            assert($textarea.val(text).caret(len - 7).caret()).equals(len - 7);
+                            assert($textarea.val(text).caret(len - 6).caret()).equals(len - 6);
+                            assert($textarea.val(text).caret(len - 5).caret()).equals(len - 5);
+                            assert($textarea.val(text).caret(len - 4).caret()).equals(len - 4);
+                            assert($textarea.val(text).caret(len - 3).caret()).equals(len - 3);
+                            assert($textarea.val(text).caret(len - 2).caret()).equals(len - 2);
                             assert($textarea.val(text).caret(len - 1).caret()).equals(len - 1);
                             assert($textarea.val(text).caret(len).caret()).equals(len);
                         });
@@ -230,6 +248,7 @@
 
                         it("Appends text", function() {
                             assert($textarea.val('abc\ndef').caret(7).caret('123').val()).equals('abc\ndef123');
+                            assert($textarea.val('abc\ndef').caret(8).caret('123').val()).equals('abc\ndef123');
                         });
 
                         it("Inserts text", function() {

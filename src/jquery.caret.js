@@ -163,7 +163,9 @@
     var _insertAtCaret = function(input, text) {
         var curPos = _getCaret(input);
 
-        var newLength = +(curPos + text.length + (input.value.length - curPos));
+        var oldValueNorm = input.value.replace(_rCarriageReturn, '');
+
+        var newLength = +(curPos + text.length + (oldValueNorm.length - curPos));
         var maxLength = +input.getAttribute('maxlength');
 
         if(_hasAttr(input, 'maxlength') && newLength > maxLength) {
@@ -171,7 +173,7 @@
             text = text.substr(0, delta);
         }
 
-        input.value = input.value.substr(0, curPos) + text + input.value.substr(curPos);
+        input.value = oldValueNorm.substr(0, curPos) + text + oldValueNorm.substr(curPos);
 
         _setCaret(input, curPos + text.length);
     };
