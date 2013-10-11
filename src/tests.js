@@ -271,6 +271,8 @@
                             assert(_s($textarea.val('abc\ndef').range(3).range())).equals(_s($textarea.val('abc\ndef').range(3, 7).range()));
                         });
                     });
+
+                    // TODO: Test $.fn.range(-3, -8)
                 });
             });
         });
