@@ -1,4 +1,4 @@
-/*! jQuery Caret plugin v1.2.0 | (c) 2012, 2013 Andrew C. Dvorak | github.com/acdvorak/jquery.caret */
+/*! jQuery Caret plugin v1.3.0 | (c) 2012, 2013 Andrew C. Dvorak | github.com/acdvorak/jquery.caret */
 (function($, undefined) {
 
     var _input = document.createElement('input');
