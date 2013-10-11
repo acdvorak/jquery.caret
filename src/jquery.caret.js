@@ -96,6 +96,7 @@
             return caret;
         }
 
+        // TODO: This can occur when you highlight part of a textarea and then click in the middle of the highlighted portion
         alert("Your browser is incredibly stupid.  I don't know what else to say.");
 
         return 0;
