@@ -58,6 +58,7 @@ Examples:
     // Insert some text at the current cursor position
     $('input').caret('Inserted Text');
     $('input').val('Held').caret(2).caret('llo Wor').val() === 'Hello World';
+    $('input').val('Held').caret(2).caret('llo Wor').caret() === 9;
 
 ## Range
 
@@ -114,7 +115,7 @@ Examples:
     $('textarea').val('Hello\nWorld').range(0, 5).range('Goodbye').val() === 'Goodbye\nWorld';
     $('textarea').val('Hello\nWorld').range(5, 6).range(' - ').val() === 'Hello - World';
 
-    // Same as $('input').caret(2).caret('llo Wor')
+    // Same as inserting text via $('input').caret(2).caret('llo Wor')
     $('input').val('Held').range(2, 2).range('llo Wor').val() === 'Hello World';
 
 ## Highlight
