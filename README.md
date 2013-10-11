@@ -35,6 +35,17 @@ Get the cursor position of the first matched element.  If one or more characters
 Set the cursor position of the first matched element.
 
 *   ```pos``` ```Number```: New cursor position.  Zero-based index relative to the beginning of the input's value.
+    Negative numbers are relative to the end of the input's value.
+
+Examples:
+
+    // Place cursor after the 3rd character
+    $('input').caret(3);
+    $('input').val('Hello World').caret(3).caret() === 3;
+
+    // Place cursor before the 3rd-last character
+    $('input').caret(-3);
+    $('input').val('Hello World').caret(-3).caret() === 8;
 
 ### ```.caret(text)``` returns ```jQuery```
 
@@ -42,29 +53,69 @@ Insert text at the current cursor position of the first matched element and plac
 
 *   ```text``` ```String```: Text to insert at the current cursor position.
 
+Examples:
+
+    // Insert some text at the current cursor position
+    $('input').caret('Inserted Text');
+    $('input').val('Held').caret(2).caret('llo Wor').val() === 'Hello World';
+
 ## Range
 
     $.fn.range()
 
 Interrogate and manipulate the selected range of an input field.
 
-### ```.range()``` returns ```{ start: Number, end: Number, length: Number, text: String }```
+### ```.range()``` returns ```Range```
 
 Get the selected range (start and end position) of the first matched element, along with the value of the selected text and its length.
 If no text is selected, the ```start``` and ```end``` position will be equal to the cursor position returned by ```.caret()```.
 
-### ```.range(startPos, endPos)``` returns ```jQuery```
+### ```.range(startPos [ , endPos ])``` returns ```jQuery```
 
 Set the selection range of the first matched element.
 
-*   ```startPos``` ```Number```: New selection start position.  Zero-based index relative to the beginning of the input's value.
-*   ```endPos``` ```Number```: New selection end position.  Zero-based index relative to the beginning of the input's value.
+*   ```startPos``` ```Number```: New selection start position.
+    Zero-based index relative to the beginning of the input's value.
+    Negative numbers are relative to the end of the input's value.
+
+*   ```endPos``` ```Number``` ```(optional)```: New selection end position.
+    Zero-based index relative to the beginning of the input's value.
+    Negative numbers are relative to the end of the input's value.
+    If omitted, defaults to ```value.length```.
+
+Examples:
+
+    // Select everything after the 6th character
+    $('input').range(6);
+    $('textarea').val('Hello\nWorld').range(6).range().text === 'World';
+
+    // Select everything after the 3rd character up to (and including) the 8th character
+    $('input').range(3, 8);
+    $('textarea').val('Hello\nWorld').range(3, 8).range().text === 'lo\nWo';
+
+    // Select everything 5 characters from the end and later
+    $('input').range(-5);
+    $('textarea').val('Hello\nWorld').range(-5).range().text === 'World';
+
+    // Select the 8th-last character through (but NOT including) the 3rd-last character
+    $('input').range(-8, -3);
+    $('textarea').val('Hello\nWorld').range(-8, -3).range().text === 'lo\nWo';
 
 ### ```.range(text)``` returns ```jQuery```
 
 Replace the currently selected text of the first matched element with the given text and select the newly inserted text.
 
 *   ```text``` ```{String}```: Text to replace the current selection with.
+
+Examples:
+
+    $('input').range('Replacement Text');
+
+    $('textarea').val('Hello\nWorld').range(0, 5).range('Goodbye').val() === 'Goodbye\nWorld';
+    $('textarea').val('Hello\nWorld').range(5, 6).range(' - ').val() === 'Hello - World';
+
+    // Same as $('input').caret(2).caret('llo Wor')
+    $('input').val('Held').range(2, 2).range('llo Wor').val() === 'Hello World';
 
 ## Highlight
 
@@ -73,6 +124,18 @@ Replace the currently selected text of the first matched element with the given 
 Highlights (selects) all text in child-bearing elements (e.g., ```<span>```, ```<div>```, but not ```<input>``` or ```<br/>```).
 
 ### ```.highlight()``` returns ```jQuery```
+
+Types
+=====
+
+#### ```Range```:
+
+    {
+        start: Number,
+        end: Number,
+        length: Number,
+        text: String
+    }
 
 Gotchas
 =======
@@ -119,9 +182,7 @@ Gotchas
 TODO
 ====
 
-*  Normalize newlines?
-*  Document how newlines are handled with respect to ```elem.value.length``` in IE
-*  Accept negative offsets for cursor position arguments
+*  Verify assertions about normalizing line endings in "Gotchas" section
 
 License
 =======
