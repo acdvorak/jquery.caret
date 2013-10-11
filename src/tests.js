@@ -225,6 +225,8 @@
                             assert($input.val('abcde').caret(3).caret('123').val()).equals('abcde');
                             assert($input.val('abcde').caret(5).caret('123').val()).equals('abcde');
                         });
+
+                        it("TODO: Test caret position AFTER insertion");
                     });
 
                     describe('<textarea>', function() {
@@ -250,6 +252,8 @@
                             assert($textarea.val('abc\ndef\ng').caret(3).caret('123').val()).equals('abc\ndef\ng');
                             assert($textarea.val('abc\ndef\ng').caret(5).caret('123').val()).equals('abc\ndef\ng');
                         });
+
+                        it("TODO: Test caret position AFTER insertion");
                     });
                 });
             });
@@ -274,6 +278,8 @@
 
                     // TODO: Test $.fn.range(-3, -8)
                 });
+
+                it("TODO: Test range positions AFTER replacement/insertion");
             });
         });
 
