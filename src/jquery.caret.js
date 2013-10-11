@@ -90,7 +90,7 @@
                 caret = input.value.replace(_rNewlineIE, '\n').length;
             } else {
                 caret = -textInputRange.moveStart("character", -len);
-                caret += normalizedValue.slice(0, caret).split("\n").length - 1;
+//                    caret += normalizedValue.slice(0, caret).split("\n").length - 1;
             }
 
             return caret;
