@@ -89,7 +89,7 @@ Examples:
     $('input').range(6);
     $('textarea').val('Hello\nWorld').range(6).range().text === 'World';
 
-    // Select everything after the 3rd character up to (and including) the 8th character
+    // Select everything after the 3rd character through (and including) the 8th character
     $('input').range(3, 8);
     $('textarea').val('Hello\nWorld').range(3, 8).range().text === 'lo\nWo';
 
@@ -97,7 +97,7 @@ Examples:
     $('input').range(-5);
     $('textarea').val('Hello\nWorld').range(-5).range().text === 'World';
 
-    // Select the 8th-last character through (but NOT including) the 3rd-last character
+    // Select the 8th-last character up to (but NOT including) the 3rd-last character
     $('input').range(-8, -3);
     $('textarea').val('Hello\nWorld').range(-8, -3).range().text === 'lo\nWo';
 
