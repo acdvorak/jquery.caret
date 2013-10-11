@@ -222,6 +222,31 @@
                             assert($input.val('abcde').caret(5).caret('123').val()).equals('abcde');
                         });
                     });
+
+                    describe('<textarea>', function() {
+                        it("Prepends text", function() {
+                            assert($textarea.val('abc\ndef').caret(0).caret('123').val()).equals('123abc\ndef');
+                        });
+
+                        it("Appends text", function() {
+                            assert($textarea.val('abc\ndef').caret(7).caret('123').val()).equals('abc\ndef123');
+                        });
+
+                        it("Inserts text", function() {
+                            assert($textarea.val('abc\ndef').caret(3).caret('123').val()).equals('abc123\ndef');
+                            assert($textarea.val('abc\ndef').caret(4).caret('123').val()).equals('abc\n123def');
+                        });
+
+                        it("Respects maxlength attribute", function() {
+                            $textarea.attr('maxlength', 9);
+                            assert($textarea.val('abc\ndef').caret(0).caret('123').val()).equals('12abc\ndef');
+                            assert($textarea.val('abc\ndef').caret(3).caret('123').val()).equals('abc12\ndef');
+                            assert($textarea.val('abc\ndef').caret(4).caret('123').val()).equals('abc\n12def');
+                            assert($textarea.val('abc\ndef\ng').caret(0).caret('123').val()).equals('abc\ndef\ng');
+                            assert($textarea.val('abc\ndef\ng').caret(3).caret('123').val()).equals('abc\ndef\ng');
+                            assert($textarea.val('abc\ndef\ng').caret(5).caret('123').val()).equals('abc\ndef\ng');
+                        });
+                    });
                 });
             });
         });
