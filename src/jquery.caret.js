@@ -8,8 +8,7 @@
         createTextRange: ('createTextRange' in _input) || ('selection' in document)
     };
 
-    var _rNewlineChars = /[\r\n]/g,
-        _rNewlineIE = /\r\n/g,
+    var _rNewlineIE = /\r\n/g,
         _rCarriageReturn = /\r/g;
 
     var _format = function() {
@@ -64,7 +63,7 @@
      * @see http://stackoverflow.com/q/6943000/467582
      */
     var _getCaretIE = function(input) {
-        var caret, normalizedValue, range, textInputRange, len, endRange;
+        var caret, range, textInputRange, len, endRange;
 
         // Yeah, you have to focus twice for IE 7 and 8.  *cries*
         input.focus();
@@ -74,7 +73,6 @@
 
         if (range && range.parentElement() === input) {
             len = input.value.length;
-            normalizedValue = input.value.replace(_rNewlineIE, '');
 
             // Create a working TextRange that lives only in the input
             textInputRange = input.createTextRange();
@@ -90,7 +88,6 @@
                 caret = input.value.replace(_rNewlineIE, '\n').length;
             } else {
                 caret = -textInputRange.moveStart("character", -len);
-//                    caret += normalizedValue.slice(0, caret).split("\n").length - 1;
             }
 
             return caret;
@@ -309,7 +306,6 @@
         var oldValue = $input.val();
         var selection = _getInputRange(input);
 
-        // TODO: This throws an error in IE7
         var newLength = +(selection.start + text.length + (oldValue.length - selection.end));
         var maxLength = +$input.attr('maxlength');
 
