@@ -22,6 +22,10 @@
             return document.createElement(tagName);
         };
 
+        var _s = function(obj) {
+            return JSON.stringify(obj, null, '    ');
+        };
+
         var _support = {
             normalizesNewlines: (function () {
                 var textarea = _e('textarea');
@@ -245,6 +249,17 @@
                             assert($textarea.val('abc\ndef\ng').caret(0).caret('123').val()).equals('abc\ndef\ng');
                             assert($textarea.val('abc\ndef\ng').caret(3).caret('123').val()).equals('abc\ndef\ng');
                             assert($textarea.val('abc\ndef\ng').caret(5).caret('123').val()).equals('abc\ndef\ng');
+                        });
+                    });
+                });
+            });
+
+            describe('Range', function() {
+                describe('Get', function () {
+                    describe('<textarea>', function() {
+                        it("Returns the correct range", function() {
+                            assert(_s($textarea.val('abc\ndef').range(0, 7).range())).equals(_s({ start: 0, end: 7, length: 7, text: 'abc\ndef' }));
+                            assert(_s($textarea.val('abc\ndef').range(3, 4).range())).equals(_s({ start: 3, end: 4, length: 1, text: '\n' }));
                         });
                     });
                 });
