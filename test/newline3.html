@@ -44,14 +44,6 @@
                 $textarea.on('keydown keyup keypress change click mousedown mouseup mousemove', function() {
                     $range.text(JSON.stringify($textarea.range()));
                 });
-
-//                setInterval(function() {
-//                    var curCaret = $textarea.caret(),
-//                        newCaret = curCaret + 1;
-//                    if (curCaret >= $textarea.val().length)
-//                        newCaret = 0;
-//                    $textarea.caret(newCaret).click();
-//                }, 1000);
             });
         </script>
     </body>
