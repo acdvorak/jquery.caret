@@ -322,7 +322,17 @@
                             assert(_s($textarea.val('abc\ndef').range(5, 5).range())).equals(_s({ start: 5, end: 5, length: 0, text: '' }));
                             assert(_s($textarea.val('abc\ndef').range(7, 7).range())).equals(_s({ start: 7, end: 7, length: 0, text: '' }));
                         });
+                    });
 
+                    describe('<input>', function() {
+                        it("Returns the correct range", function() {
+                            assert(_s($textarea.val('abcdef').range(0, 6).range())).equals(_s({ start: 0, end: 6, length: 6, text: 'abcdef' }));
+                            assert(_s($textarea.val('abcdef').range(2, 5).range())).equals(_s({ start: 2, end: 5, length: 3, text: 'cde' }));
+                            assert(_s($textarea.val('abcdef').range(3, 4).range())).equals(_s({ start: 3, end: 4, length: 1, text: 'd' }));
+                        });
+                    });
+
+                    describe('<textarea>', function() {
                         it("Returns the correct range", function() {
                             assert(_s($textarea.val('abc\ndef').range(0, 7).range())).equals(_s({ start: 0, end: 7, length: 7, text: 'abc\ndef' }));
                             assert(_s($textarea.val('abc\ndef').range(2, 5).range())).equals(_s({ start: 2, end: 5, length: 3, text: 'c\nd' }));
