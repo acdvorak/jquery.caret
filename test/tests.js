@@ -33,7 +33,7 @@
         };
 
         var _support = {
-            normalizesNewlines: (function () {
+            normalizesNewlines: (function() {
                 var textarea = _e('textarea');
                 textarea.value = '\r\n';
                 return textarea.value === '\n';
@@ -312,7 +312,7 @@
             });
 
             describe('Range', function() {
-                describe('Get', function () {
+                describe('Get', function() {
                     describe('<textarea>', function() {
                         it("Handles zero-length selections", function() {
                             assert(_s($textarea.val('abc\ndef').range(0, 0).range())).equals(_s({ start: 0, end: 0, length: 0, text: '' }));
@@ -331,7 +331,7 @@
                     });
                 });
 
-                describe('Set', function () {
+                describe('Set', function() {
                     describe('<textarea>', function() {
                         it("Accepts a single argument", function() {
                             assert(_s($textarea.val('abc\ndef').range(0).range())).equals(_s($textarea.val('abc\ndef').range(0, 7).range()));
