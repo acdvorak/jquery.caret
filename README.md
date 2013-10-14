@@ -11,10 +11,8 @@ of ```<input>``` and ```<textarea>``` elements, as well as highlight text on the
 Tested in:
 
 *  IE6+
-*  Google Chrome
-*  Firefox 24
-
-May work in IE 6-7 but has not been tested.
+*  Chrome
+*  Firefox
 
 Features
 ========
