@@ -365,11 +365,19 @@
 
                 describe('Set', function() {
                     it("Accepts a single argument", function() {
+                        assert($input.val('abcdef').range(0).range()).equals(_s($textarea.val('abcdef').range(0, 6).range()));
+                        assert($input.val('abcdef').range(3).range()).equals(_s($textarea.val('abcdef').range(3, 6).range()));
+
                         assert($textarea.val('abc\ndef').range(0).range()).equals(_s($textarea.val('abc\ndef').range(0, 7).range()));
                         assert($textarea.val('abc\ndef').range(3).range()).equals(_s($textarea.val('abc\ndef').range(3, 7).range()));
                     });
 
                     it("Accepts negative arguments", function() {
+                        assert($textarea.val('abcdef').range(-4).range()).equals(_s($textarea.val('abcdef').range(2).range()));
+                        assert($textarea.val('abcdef').range(0, -2).range()).equals(_s($textarea.val('abcdef').range(0, 4).range()));
+                        assert($textarea.val('abcdef').range(3, -2).range()).equals(_s($textarea.val('abcdef').range(3, 4).range()));
+                        assert($textarea.val('abcdef').range(-4, -2).range()).equals(_s($textarea.val('abcdef').range(2, 4).range()));
+
                         assert($textarea.val('abc\ndef').range(-4).range()).equals(_s($textarea.val('abc\ndef').range(3).range()));
                         assert($textarea.val('abc\ndef').range(0, -2).range()).equals(_s($textarea.val('abc\ndef').range(0, 5).range()));
                         assert($textarea.val('abc\ndef').range(3, -2).range()).equals(_s($textarea.val('abc\ndef').range(3, 5).range()));
