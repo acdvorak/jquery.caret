@@ -295,16 +295,16 @@
                             button = _e('button');
 
                         $input.val('abcdef').range(3, 5);
-                        assert(_s($([ span, div, button, $input[0] ]).range())).equals(_s({ start: 3, end: 5, length: 2, text: 'de' }));
+                        assert($([ span, div, button, $input[0] ]).range()).equals(_s({ start: 3, end: 5, length: 2, text: 'de' }));
 
                         $textarea.val('abcdef').range(3, 5);
-                        assert(_s($([ span, div, button, $textarea[0] ]).range())).equals(_s({ start: 3, end: 5, length: 2, text: 'de' }));
+                        assert($([ span, div, button, $textarea[0] ]).range()).equals(_s({ start: 3, end: 5, length: 2, text: 'de' }));
                     });
 
                     it("Returns zero (0) start/end/length and empty ('') text when no value has been set", function() {
-                        assert(_s($input.range())).equals(_s({ start: 0, end: 0, length: 0, text: '' }));
+                        assert($input.range()).equals(_s({ start: 0, end: 0, length: 0, text: '' }));
 
-                        assert(_s($textarea.range())).equals(_s({ start: 0, end: 0, length: 0, text: '' }));
+                        assert($textarea.range()).equals(_s({ start: 0, end: 0, length: 0, text: '' }));
                     });
 
                     it("Returns zero (0) or value.length when a value has been set", function() {
@@ -331,49 +331,49 @@
                     });
 
                     it("Handles zero-length selections", function() {
-                        assert(_s($input.val('abcdef').range(0, 0).range())).equals(_s({ start: 0, end: 0, length: 0, text: '' }));
-                        assert(_s($input.val('abcdef').range(1, 1).range())).equals(_s({ start: 1, end: 1, length: 0, text: '' }));
-                        assert(_s($input.val('abcdef').range(2, 2).range())).equals(_s({ start: 2, end: 2, length: 0, text: '' }));
-                        assert(_s($input.val('abcdef').range(3, 3).range())).equals(_s({ start: 3, end: 3, length: 0, text: '' }));
-                        assert(_s($input.val('abcdef').range(4, 4).range())).equals(_s({ start: 4, end: 4, length: 0, text: '' }));
-                        assert(_s($input.val('abcdef').range(5, 5).range())).equals(_s({ start: 5, end: 5, length: 0, text: '' }));
-                        assert(_s($input.val('abcdef').range(6, 6).range())).equals(_s({ start: 6, end: 6, length: 0, text: '' }));
+                        assert($input.val('abcdef').range(0, 0).range()).equals(_s({ start: 0, end: 0, length: 0, text: '' }));
+                        assert($input.val('abcdef').range(1, 1).range()).equals(_s({ start: 1, end: 1, length: 0, text: '' }));
+                        assert($input.val('abcdef').range(2, 2).range()).equals(_s({ start: 2, end: 2, length: 0, text: '' }));
+                        assert($input.val('abcdef').range(3, 3).range()).equals(_s({ start: 3, end: 3, length: 0, text: '' }));
+                        assert($input.val('abcdef').range(4, 4).range()).equals(_s({ start: 4, end: 4, length: 0, text: '' }));
+                        assert($input.val('abcdef').range(5, 5).range()).equals(_s({ start: 5, end: 5, length: 0, text: '' }));
+                        assert($input.val('abcdef').range(6, 6).range()).equals(_s({ start: 6, end: 6, length: 0, text: '' }));
 
-                        assert(_s($textarea.val('abc\ndef').range(0, 0).range())).equals(_s({ start: 0, end: 0, length: 0, text: '' }));
-                        assert(_s($textarea.val('abc\ndef').range(1, 1).range())).equals(_s({ start: 1, end: 1, length: 0, text: '' }));
-                        assert(_s($textarea.val('abc\ndef').range(3, 3).range())).equals(_s({ start: 3, end: 3, length: 0, text: '' }));
-                        assert(_s($textarea.val('abc\ndef').range(4, 4).range())).equals(_s({ start: 4, end: 4, length: 0, text: '' }));
-                        assert(_s($textarea.val('abc\ndef').range(5, 5).range())).equals(_s({ start: 5, end: 5, length: 0, text: '' }));
-                        assert(_s($textarea.val('abc\ndef').range(7, 7).range())).equals(_s({ start: 7, end: 7, length: 0, text: '' }));
+                        assert($textarea.val('abc\ndef').range(0, 0).range()).equals(_s({ start: 0, end: 0, length: 0, text: '' }));
+                        assert($textarea.val('abc\ndef').range(1, 1).range()).equals(_s({ start: 1, end: 1, length: 0, text: '' }));
+                        assert($textarea.val('abc\ndef').range(3, 3).range()).equals(_s({ start: 3, end: 3, length: 0, text: '' }));
+                        assert($textarea.val('abc\ndef').range(4, 4).range()).equals(_s({ start: 4, end: 4, length: 0, text: '' }));
+                        assert($textarea.val('abc\ndef').range(5, 5).range()).equals(_s({ start: 5, end: 5, length: 0, text: '' }));
+                        assert($textarea.val('abc\ndef').range(7, 7).range()).equals(_s({ start: 7, end: 7, length: 0, text: '' }));
                     });
 
                     it("Returns the correct range", function() {
-                        assert(_s($input.val('abcdef').range(0, 6).range())).equals(_s({ start: 0, end: 6, length: 6, text: 'abcdef' }));
-                        assert(_s($input.val('abcdef').range(2, 5).range())).equals(_s({ start: 2, end: 5, length: 3, text: 'cde' }));
-                        assert(_s($input.val('abcdef').range(3, 4).range())).equals(_s({ start: 3, end: 4, length: 1, text: 'd' }));
+                        assert($input.val('abcdef').range(0, 6).range()).equals(_s({ start: 0, end: 6, length: 6, text: 'abcdef' }));
+                        assert($input.val('abcdef').range(2, 5).range()).equals(_s({ start: 2, end: 5, length: 3, text: 'cde' }));
+                        assert($input.val('abcdef').range(3, 4).range()).equals(_s({ start: 3, end: 4, length: 1, text: 'd' }));
 
-                        assert(_s($textarea.val('abc\ndef').range(0, 7).range())).equals(_s({ start: 0, end: 7, length: 7, text: 'abc\ndef' }));
-                        assert(_s($textarea.val('abc\ndef').range(2, 5).range())).equals(_s({ start: 2, end: 5, length: 3, text: 'c\nd' }));
-                        assert(_s($textarea.val('abc\ndef').range(3, 4).range())).equals(_s({ start: 3, end: 4, length: 1, text: '\n' }));
+                        assert($textarea.val('abc\ndef').range(0, 7).range()).equals(_s({ start: 0, end: 7, length: 7, text: 'abc\ndef' }));
+                        assert($textarea.val('abc\ndef').range(2, 5).range()).equals(_s({ start: 2, end: 5, length: 3, text: 'c\nd' }));
+                        assert($textarea.val('abc\ndef').range(3, 4).range()).equals(_s({ start: 3, end: 4, length: 1, text: '\n' }));
                     });
 
                     it("Normalizes newlines", function() {
-                        assert(_s($textarea.val('abc\r\ndef').range(0, 7).range())).equals(_s({ start: 0, end: 7, length: 7, text: 'abc\ndef' }));
-                        assert(_s($textarea.val('abc\r\ndef').range(2, 5).range())).equals(_s({ start: 2, end: 5, length: 3, text: 'c\nd' }));
+                        assert($textarea.val('abc\r\ndef').range(0, 7).range()).equals(_s({ start: 0, end: 7, length: 7, text: 'abc\ndef' }));
+                        assert($textarea.val('abc\r\ndef').range(2, 5).range()).equals(_s({ start: 2, end: 5, length: 3, text: 'c\nd' }));
                     });
                 });
 
                 describe('Set', function() {
                     it("Accepts a single argument", function() {
-                        assert(_s($textarea.val('abc\ndef').range(0).range())).equals(_s($textarea.val('abc\ndef').range(0, 7).range()));
-                        assert(_s($textarea.val('abc\ndef').range(3).range())).equals(_s($textarea.val('abc\ndef').range(3, 7).range()));
+                        assert($textarea.val('abc\ndef').range(0).range()).equals(_s($textarea.val('abc\ndef').range(0, 7).range()));
+                        assert($textarea.val('abc\ndef').range(3).range()).equals(_s($textarea.val('abc\ndef').range(3, 7).range()));
                     });
 
                     it("Accepts negative arguments", function() {
-                        assert(_s($textarea.val('abc\ndef').range(-4).range())).equals(_s($textarea.val('abc\ndef').range(3).range()));
-                        assert(_s($textarea.val('abc\ndef').range(0, -2).range())).equals(_s($textarea.val('abc\ndef').range(0, 5).range()));
-                        assert(_s($textarea.val('abc\ndef').range(3, -2).range())).equals(_s($textarea.val('abc\ndef').range(3, 5).range()));
-                        assert(_s($textarea.val('abc\ndef').range(-4, -2).range())).equals(_s($textarea.val('abc\ndef').range(3, 5).range()));
+                        assert($textarea.val('abc\ndef').range(-4).range()).equals(_s($textarea.val('abc\ndef').range(3).range()));
+                        assert($textarea.val('abc\ndef').range(0, -2).range()).equals(_s($textarea.val('abc\ndef').range(0, 5).range()));
+                        assert($textarea.val('abc\ndef').range(3, -2).range()).equals(_s($textarea.val('abc\ndef').range(3, 5).range()));
+                        assert($textarea.val('abc\ndef').range(-4, -2).range()).equals(_s($textarea.val('abc\ndef').range(3, 5).range()));
                     });
                 });
 
