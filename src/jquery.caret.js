@@ -55,6 +55,10 @@
         this.text = text || '';
     };
 
+    Range.prototype.toString = function() {
+        return JSON.stringify(this, null, '    ');
+    };
+
     var _getCaretW3 = function(input) {
         return input.selectionStart;
     };
