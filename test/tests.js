@@ -19,6 +19,20 @@
          */
         isOneOf: function(actual, expected, message) {
             ok(expected.indexOf(actual) !== -1, message);
+        },
+
+        /**
+         * Asserts that the actual {@link Range} has a length of zero (0), empty text (''), equal start/end positions,
+         * and a start/end position that matches one of the expected start/end positions.
+         * @param {Range} actual
+         * @param {Number} length Length of the input/textarea's value
+         * @param {String} message Message to display if the assertion fails
+         */
+        isEmptyRange: function(actual, length, message) {
+            ok(actual.length === 0, message);
+            ok(actual.text === '', message);
+            ok(actual.start === actual.end, message);
+            ok([ 0, length ].indexOf(actual.start) !== -1, message);
         }
     });
 
@@ -313,6 +327,101 @@
 
             describe('Range', function() {
                 describe('Get', function() {
+                    it("Returns undefined when the jQuery object does not contain an input or textarea element", function() {
+                        assert($().range()).isUndefined();
+                        assert($({}).range()).isUndefined();
+                        assert($('<div/>').range()).isUndefined();
+                        assert($([ _e('span'), _e('div'), _e('button') ]).range()).isUndefined();
+                    });
+
+                    describe('<input>', function() {
+                        it("Returns the selected range of the first input element in the jQuery object", function() {
+                            var span = _e('span'),
+                                div = _e('div'),
+                                button = _e('button');
+
+                            $input.val('abcdef').range(3, 5);
+
+                            assert(_s($([ span, div, button, $input[0] ]).range())).equals(_s({ start: 3, end: 5, length: 2, text: 'de' }));
+                        });
+                    });
+
+                    describe('<textarea>', function() {
+                        it("Returns the selected range of the first textarea element in the jQuery object", function() {
+                            var span = _e('span'),
+                                div = _e('div'),
+                                button = _e('button');
+
+                            $textarea.val('abcdef').range(3, 5);
+
+                            assert(_s($([ span, div, button, $textarea[0] ]).range())).equals(_s({ start: 3, end: 5, length: 2, text: 'de' }));
+                        });
+                    });
+
+                    describe('<input>', function() {
+                        it("Returns zero (0) start/end/length and empty ('') text when no value has been set", function() {
+                            assert(_s($input.range())).equals(_s({ start: 0, end: 0, length: 0, text: '' }));
+                        });
+                    });
+
+                    describe('<textarea>', function() {
+                        it("Returns zero (0) start/end/length and empty ('') text when no value has been set", function() {
+                            assert(_s($textarea.range())).equals(_s({ start: 0, end: 0, length: 0, text: '' }));
+                        });
+                    });
+
+                    describe('<input>', function() {
+                        it("Returns zero (0) or value.length when a value has been set", function() {
+                            // In IE and FF, the caret remains at index 0 the first time a value is set;
+                            // the second time a value is set, the caret moves to the end of the input/textarea.
+                            var text = _single,
+                                len = text.length;
+                            assert($input.val(text).range()).isEmptyRange(len);
+                            assert($input.val(text).range()).isEmptyRange(len);
+                        });
+                    });
+
+                    describe('<textarea>', function() {
+                        it("Returns zero (0) or value.length when a value has been set", function() {
+                            // In IE and FF, the caret remains at index 0 the first time a value is set;
+                            // the second time a value is set, the caret moves to the end of the input/textarea.
+                            var text = _multi,
+                                len = text.norm().length;
+                            assert($textarea.val(text).range()).isEmptyRange(len);
+                            assert($textarea.val(text).range()).isEmptyRange(len);
+                        });
+                    });
+
+                    describe('<input>', function() {
+                        it("Returns zero (0) or value.length when the input's value changes", function() {
+                            assert($input.val(_short).range()).isEmptyRange(_short.length);
+                            assert($input.val(_long).range()).isEmptyRange(_long.length);
+                            assert($input.val(_short).range()).isEmptyRange(_short.length);
+                            assert($input.val(_empty).range()).isEmptyRange(_empty.length);
+                        });
+                    });
+
+                    describe('<textarea>', function() {
+                        it("Returns zero (0) or value.length when the textarea's value changes", function() {
+                            assert($textarea.val(_short).range()).isEmptyRange(_short.length);
+                            assert($textarea.val(_long).range()).isEmptyRange(_long.length);
+                            assert($textarea.val(_short).range()).isEmptyRange(_short.length);
+                            assert($textarea.val(_empty).range()).isEmptyRange(_empty.length);
+                        });
+                    });
+
+                    describe('<input>', function() {
+                        it("Handles zero-length selections", function() {
+                            assert(_s($input.val('abcdef').range(0, 0).range())).equals(_s({ start: 0, end: 0, length: 0, text: '' }));
+                            assert(_s($input.val('abcdef').range(1, 1).range())).equals(_s({ start: 1, end: 1, length: 0, text: '' }));
+                            assert(_s($input.val('abcdef').range(2, 2).range())).equals(_s({ start: 2, end: 2, length: 0, text: '' }));
+                            assert(_s($input.val('abcdef').range(3, 3).range())).equals(_s({ start: 3, end: 3, length: 0, text: '' }));
+                            assert(_s($input.val('abcdef').range(4, 4).range())).equals(_s({ start: 4, end: 4, length: 0, text: '' }));
+                            assert(_s($input.val('abcdef').range(5, 5).range())).equals(_s({ start: 5, end: 5, length: 0, text: '' }));
+                            assert(_s($input.val('abcdef').range(6, 6).range())).equals(_s({ start: 6, end: 6, length: 0, text: '' }));
+                        });
+                    });
+
                     describe('<textarea>', function() {
                         it("Handles zero-length selections", function() {
                             assert(_s($textarea.val('abc\ndef').range(0, 0).range())).equals(_s({ start: 0, end: 0, length: 0, text: '' }));
@@ -337,6 +446,13 @@
                             assert(_s($textarea.val('abc\ndef').range(0, 7).range())).equals(_s({ start: 0, end: 7, length: 7, text: 'abc\ndef' }));
                             assert(_s($textarea.val('abc\ndef').range(2, 5).range())).equals(_s({ start: 2, end: 5, length: 3, text: 'c\nd' }));
                             assert(_s($textarea.val('abc\ndef').range(3, 4).range())).equals(_s({ start: 3, end: 4, length: 1, text: '\n' }));
+                        });
+                    });
+
+                    describe('<textarea>', function() {
+                        it("Normalizes newlines", function() {
+                            assert(_s($textarea.val('abc\r\ndef').range(0, 7).range())).equals(_s({ start: 0, end: 7, length: 7, text: 'abc\ndef' }));
+                            assert(_s($textarea.val('abc\r\ndef').range(2, 5).range())).equals(_s({ start: 2, end: 5, length: 3, text: 'c\nd' }));
                         });
                     });
                 });
