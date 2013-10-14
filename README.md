@@ -185,9 +185,40 @@ var normalizesNewlines = (function () {
 }());
 ```
 
-## Browser Bugs
+## Detached Elements
 
-### Selecting Newlines in IE 6-8
+It is not possible to **set** the selection range/caret position of a detached element in any browser.
+The element **must** be in the DOM to be able to manipulate its caret/range.
+
+Wrong:
+
+```javascript
+// false in all browsers
+$('<input/>').val('abcdef').caret(3).caret() === 3;
+```
+
+Right:
+
+```javascript
+// true in all browsers
+$('<input/>').appendTo($('body')).val('abcdef').caret(3).caret() === 3;
+```
+
+## Selection State
+
+All browsers except IE track selection range on a per-element basis.  In other words, each element remembers
+its own selection range and caret position so that switching focus from one input to another doesn't lose
+the original input's selection range/caret position.
+
+Predictably, IE only has a single global selection range for the entire page and can only track one element at a time.
+Thus placing the cursor in the middle of an input and pressing <kbd>Tab</kbd> followed by <kbd>Shift</kbd> + <kbd>Tab</kbd>
+loses the original input's caret position.
+
+While not necessarily a huge issue, it's something to be aware of.
+
+# Browser Bugs
+
+## Selecting Newlines in IE 6-8
 
 There's a bug in IE 6-8 that prevents ```.range()``` from parsing a selection that **_ends_** with newlines.
 
@@ -225,12 +256,13 @@ However, if we select the two newlines followed by the letter ```D```, as shown 
 
 Run ```test/newline-range.html``` in IE 6-8 and try the above examples to see the bug in action.
 
-### Deselecting Text in IE 6-10
+## Deselecting Text in IE 6-10
 
-In all versions of IE (6-10), clicking _inside_ a text selection returns the wrong range.
+In all versions of IE (6-10), clicking _inside_ selected text returns the wrong selection range and caret position.
 
 Run ```test/newline-range.html``` in any version of IE and select some text in the textarea.
 Then click anywhere **inside** the selection (without moving the mouse) to see the bug in action.
+
 Clicking _outside_ the selection works just fine.
 
 License
