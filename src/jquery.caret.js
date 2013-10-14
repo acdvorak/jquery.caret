@@ -37,6 +37,10 @@
             pos = len + pos;
         }
 
+        // Enforce boundaries
+        if (pos < 0) { pos = 0; }
+        if (pos > len) { pos = len; }
+
         return pos;
     };
 
