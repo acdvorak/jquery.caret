@@ -152,6 +152,8 @@
                         it("Enforces length boundary", function() {
                             assert($input.val(text).caret(len + 1).caret()).equals(len);
                             assert($input.val(text).caret(len + 2).caret()).equals(len);
+                            assert($input.val(text).caret(-len - 1).caret()).equals(0);
+                            assert($input.val(text).caret(-len - 2).caret()).equals(0);
                         });
 
                         it("Allows negative position", function() {
@@ -201,6 +203,8 @@
                         it("Enforces length boundary", function() {
                             assert($textarea.val(text).caret(len + 1).caret()).equals(len);
                             assert($textarea.val(text).caret(len + 2).caret()).equals(len);
+                            assert($textarea.val(text).caret(-len - 1).caret()).equals(0);
+                            assert($textarea.val(text).caret(-len - 2).caret()).equals(0);
                         });
 
                         it("Allows negative position", function() {
