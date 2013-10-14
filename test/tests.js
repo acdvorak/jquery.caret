@@ -237,7 +237,18 @@
                             assert($input.val('abcde').caret(5).caret('123').val()).equals('abcde');
                         });
 
-                        it("TODO: Test caret position AFTER insertion");
+                        it("Sets the caret position after inserting text", function() {
+                            $input.attr('maxlength', 5);
+                            assert($input.val('').caret(0).caret('123').caret()).equals(3);
+                            assert($input.val('abc').caret(0).caret('12').caret()).equals(2);
+                            assert($input.val('abc').caret(1).caret('12').caret()).equals(3);
+                            assert($input.val('abc').caret(3).caret('1').caret()).equals(4);
+                            assert($input.val('abc').caret(0).caret('123').caret()).equals(2);
+                            assert($input.val('abc').caret(3).caret('123').caret()).equals(5);
+                            assert($input.val('abcde').caret(0).caret('123').caret()).equals(0);
+                            assert($input.val('abcde').caret(3).caret('123').caret()).equals(3);
+                            assert($input.val('abcde').caret(5).caret('123').caret()).equals(5);
+                        });
                     });
 
                     describe('<textarea>', function() {
@@ -265,7 +276,19 @@
                             assert($textarea.val('abc\ndef\ng').caret(5).caret('123').val()).equals('abc\ndef\ng');
                         });
 
-                        it("TODO: Test caret position AFTER insertion");
+                        it("Sets the caret position after inserting text", function() {
+                            $textarea.attr('maxlength', 9);
+                            assert($textarea.val('').caret(0).caret('123').caret()).equals(3);
+                            assert($textarea.val('abc\ndef').caret(0).caret('12').caret()).equals(2);
+                            assert($textarea.val('abc\ndef').caret(1).caret('12').caret()).equals(3);
+                            assert($textarea.val('abc\ndef').caret(3).caret('1').caret()).equals(4);
+                            assert($textarea.val('abc\ndef').caret(0).caret('123').caret()).equals(2);
+                            assert($textarea.val('abc\ndef').caret(3).caret('123').caret()).equals(5);
+                            assert($textarea.val('abc\ndef').caret(4).caret('123').caret()).equals(6);
+                            assert($textarea.val('abc\ndef\ng').caret(0).caret('123').caret()).equals(0);
+                            assert($textarea.val('abc\ndef\ng').caret(3).caret('123').caret()).equals(3);
+                            assert($textarea.val('abc\ndef\ng').caret(5).caret('123').caret()).equals(5);
+                        });
                     });
                 });
             });
