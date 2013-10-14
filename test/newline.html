@@ -47,8 +47,8 @@
                     var expectedLength = (end - start);
 
                     alert(
-                            (range.length === expectedLength) + ': found ' + range.length + ', expected ' + expectedLength + '\n' +
-                            (range.text === expectedText) + ': found "' + range.text.visualizeNewlines() + '"' + ', expected ' + '"' + expectedText.visualizeNewlines() + '"'
+                            (range.length === expectedLength ? 'Pass' : 'FAIL') + ': found ' + range.length + ', expected ' + expectedLength + '\n' +
+                            (range.text === expectedText ? 'Pass' : 'FAIL') + ': found "' + range.text.visualizeNewlines() + '"' + ', expected ' + '"' + expectedText.visualizeNewlines() + '"'
                     );
                 }
 
