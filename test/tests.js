@@ -400,6 +400,46 @@
                         assert($textarea.range(3, -2).range()).equalsString($textarea.range(3, 5).range());
                         assert($textarea.range(-4, -2).range()).equalsString($textarea.range(3, 5).range());
                     });
+
+                    it("Handles end position before start position", function() {
+                        $input.val('abcdef');
+                        assert($input.range(3, 0).range()).equalsString($input.range(0, 0).range());
+
+                        // TODO: Investigate why this works the way it does and whether this behavior should change.
+                        assert($input.range(3, 2).range()).equalsString($input.range(2, 2).range());
+                    });
+
+                    it("Enforces length boundary", function() {
+                        $input.val('abcdef');
+                        assert($input.range(-20, 5).range()).equalsString($input.range(0, 5).range());
+                        assert($input.range(-20, -10).range()).equalsString($input.range(0, 0).range());
+                        assert($input.range(-20, -25).range()).equalsString($input.range(0, 0).range());
+                        assert($input.range(3, -25).range()).equalsString($input.range(0, 0).range());
+                        assert($input.range(3, 50).range()).equalsString($input.range(3, 6).range());
+                        assert($input.range(50, 50).range()).equalsString($input.range(6, 6).range());
+
+                        $textarea.val('abc\ndef');
+                        assert($textarea.range(-20, 5).range()).equalsString($textarea.range(0, 5).range());
+                        assert($textarea.range(-20, -10).range()).equalsString($textarea.range(0, 0).range());
+                        assert($textarea.range(-20, -25).range()).equalsString($textarea.range(0, 0).range());
+                        assert($textarea.range(3, -25).range()).equalsString($textarea.range(0, 0).range());
+                        assert($textarea.range(3, 50).range()).equalsString($textarea.range(3, 7).range());
+                        assert($textarea.range(50, 50).range()).equalsString($textarea.range(7, 7).range());
+                    });
+
+                    it("Converts floating point values to integers", function() {
+                        $input.val('abcdef');
+                        assert($input.range(1.5).range()).equalsString($input.range(1, 6).range());
+                        assert($input.range(2.5).range()).equalsString($input.range(2, 6).range());
+                        assert($input.range(1.5, 3.5).range()).equalsString($input.range(1, 3).range());
+                        assert($input.range(2.5, 4.5).range()).equalsString($input.range(2, 4).range());
+
+                        $textarea.val('abc\ndef');
+                        assert($textarea.range(1.5).range()).equalsString($textarea.range(1, 7).range());
+                        assert($textarea.range(2.5).range()).equalsString($textarea.range(2, 7).range());
+                        assert($textarea.range(1.5, 3.5).range()).equalsString($textarea.range(1, 3).range());
+                        assert($textarea.range(2.5, 4.5).range()).equalsString($textarea.range(2, 4).range());
+                    });
                 });
 
                 it("TODO: Test range positions AFTER replacement/insertion");
