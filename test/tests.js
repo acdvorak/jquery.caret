@@ -11,6 +11,12 @@
     };
 
     pavlov.specify.extendAssertions({
+        /**
+         * Asserts that the actual value is one of the given expected values.
+         * @param {*} actual Actual value
+         * @param {*[]} expected Array of expected values to search
+         * @param {String} message Message to display if the assertion fails
+         */
         isOneOf: function(actual, expected, message) {
             ok(expected.indexOf(actual) !== -1, message);
         }
