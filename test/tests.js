@@ -33,6 +33,10 @@
             ok(actual.text === '', message);
             ok(actual.start === actual.end, message);
             ok([ 0, length ].indexOf(actual.start) !== -1, message);
+        },
+
+        equalsString: function(actual, expected, message) {
+            ok(actual && expected && JSON.stringify(actual) === JSON.stringify(expected), message);
         }
     });
 
@@ -299,16 +303,16 @@
                             button = _e('button');
 
                         $input.val('abcdef').range(3, 5);
-                        assert($([ span, div, button, $input[0] ]).range()).equals(_s({ start: 3, end: 5, length: 2, text: 'de' }));
+                        assert($([ span, div, button, $input[0] ]).range()).equalsString({ start: 3, end: 5, length: 2, text: 'de' });
 
                         $textarea.val('abcdef').range(3, 5);
-                        assert($([ span, div, button, $textarea[0] ]).range()).equals(_s({ start: 3, end: 5, length: 2, text: 'de' }));
+                        assert($([ span, div, button, $textarea[0] ]).range()).equalsString({ start: 3, end: 5, length: 2, text: 'de' });
                     });
 
                     it("Returns zero (0) start/end/length and empty ('') text when no value has been set", function() {
-                        assert($input.range()).equals(_s({ start: 0, end: 0, length: 0, text: '' }));
+                        assert($input.range()).equalsString({ start: 0, end: 0, length: 0, text: '' });
 
-                        assert($textarea.range()).equals(_s({ start: 0, end: 0, length: 0, text: '' }));
+                        assert($textarea.range()).equalsString({ start: 0, end: 0, length: 0, text: '' });
                     });
 
                     it("Returns zero (0) or value.length when a value has been set", function() {
