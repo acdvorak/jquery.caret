@@ -268,5 +268,7 @@ Clicking _outside_ the selection works just fine.
 License
 =======
 
+MIT license.  See ```MIT-LICENSE.txt```.
+
 [sitepoint-line-endings]: http://www.sitepoint.com/line-endings-in-javascript/
 [stackoverflow-newline]: http://stackoverflow.com/a/1156388/467582
