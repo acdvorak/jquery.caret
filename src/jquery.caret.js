@@ -93,8 +93,9 @@
             return caret;
         }
 
-        // TODO: This can occur when you highlight part of a textarea and then click in the middle of the highlighted portion
-        alert("Your browser is incredibly stupid.  I don't know what else to say.");
+        // TODO: This can occur when you highlight part of a textarea and then click in the middle of the highlighted portion in IE 6-10
+//        alert("Your browser is incredibly stupid.  I don't know what else to say.");
+//        alert(range + '\n\n' + range.parentElement().tagName + '#' + range.parentElement().id);
 
         return 0;
     };
