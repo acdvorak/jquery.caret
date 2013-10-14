@@ -74,7 +74,7 @@
                     });
 
                     describe('<input>', function() {
-                        it("Returns the caret position of the first input or textarea element in the jQuery object", function() {
+                        it("Returns the caret position of the first input element in the jQuery object", function() {
                             var span = _e('span'),
                                 div = _e('div'),
                                 button = _e('button');
@@ -82,6 +82,18 @@
                             $input.val('abcdef').caret(3);
 
                             assert($([ span, div, button, $input[0] ]).caret()).equals(3);
+                        });
+                    });
+
+                    describe('<textarea>', function() {
+                        it("Returns the caret position of the first textarea element in the jQuery object", function() {
+                            var span = _e('span'),
+                                div = _e('div'),
+                                button = _e('button');
+
+                            $textarea.val('abcdef').caret(3);
+
+                            assert($([ span, div, button, $textarea[0] ]).caret()).equals(3);
                         });
                     });
 
