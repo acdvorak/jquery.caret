@@ -6,7 +6,15 @@ jQuery Caret Plugin
 Cross-browser jQuery plugin that allows you to manipulate the cursor position and selection range
 of ```<input>``` and ```<textarea>``` elements, as well as highlight text on the page.
 
-Tested in IE8+, Firefox, Chrome, and Safari.  May work in IE 6-7 but has not been tested.
+## Browser Compatibility
+
+Tested in:
+
+*  IE6+
+*  Google Chrome
+*  Firefox 24
+
+May work in IE 6-7 but has not been tested.
 
 Features
 ========
@@ -141,48 +149,94 @@ Types
 Technical Notes
 ===============
 
-*   Line Endings (a.k.a. newlines)
+## Line Endings (a.k.a. newlines)
 
-    IE and Opera handle line endings differently than Chrome, Safari, and Firefox.
+IE and Opera handle line endings differently than Chrome, Safari, and Firefox.
 
-    From [JavaScript string newline character?][stackoverflow-newline] on Stack Overflow:
+From [JavaScript string newline character?][stackoverflow-newline] on Stack Overflow:
 
-    > IE8 and Opera 9 on Windows use ```\r\n```. All the other browsers I tested (Safari 4 and Firefox 3.5 on Windows,
-    > and Firefox 3.0 on Linux) use ```\n```. They can all handle ```\n``` just fine when setting the value, though
-    > IE and Opera will convert that back to ```\r\n``` again internally.
-    > There's a SitePoint article with some more details called [Line endings in Javascript][sitepoint-line-endings].
+> IE8 and Opera 9 on Windows use ```\r\n```. All the other browsers I tested (Safari 4 and Firefox 3.5 on Windows,
+> and Firefox 3.0 on Linux) use ```\n```. They can all handle ```\n``` just fine when setting the value, though
+> IE and Opera will convert that back to ```\r\n``` again internally.
+> There's a SitePoint article with some more details called [Line endings in Javascript][sitepoint-line-endings].
 
-    > Note also that this is independent of the actual line endings in the HTML file itself
-    > (both ```\n``` and ```\r\n``` give the same results).
+> Note also that this is independent of the actual line endings in the HTML file itself
+> (both ```\n``` and ```\r\n``` give the same results).
 
-    > When submitting the form, all browsers canonicalize newlines to ```\r\n``` (```%0D%0A``` in URL encoding).
+> When submitting the form, all browsers canonicalize newlines to ```\r\n``` (```%0D%0A``` in URL encoding).
 
-    ```.caret()``` and ```.range()``` smooth out these differences for you by normalizing line endings so they
-    behave properly in all browsers.  More specifically, they strip ```\r``` characters so that newlines are always
-    represented by a single ```\n``` character.  As a result, positioning the caret before or after a newline
-    always works the way you expect it to without any fuss.
+```.caret()``` and ```.range()``` smooth out these differences for you by normalizing line endings so they
+behave properly in all browsers.  More specifically, they strip ```\r``` characters so that newlines are always
+represented by a single ```\n``` character.  As a result, positioning the caret before or after a newline
+works the way you expect without any fuss.
 
-    **IMPORTANT**: **_Always_** access input/textarea values using jQuery's ```.val()``` method instead.
-    **_DO NOT_** use the browser's native ```.value``` property.  Doing so will bypass newline normalization
-    and return strings containing ```\r``` in IE and Opera which will almost certainly screw up length and
-    position calculations.
+**IMPORTANT**: **_Always_** access input/textarea values using jQuery's ```.val()``` method instead.
+**_DO NOT_** use the browser's native ```.value``` property.  Doing so will bypass newline normalization
+and return strings containing ```\r``` in IE and Opera which will almost certainly screw up length and
+position calculations.
 
-    Here's a quick test you can do to see if your browser normalizes line endings to ```\n```:
+Here's a quick test you can do to see if your browser normalizes line endings to ```\n```:
 
-    ```javascript
-    // true in Chrome, Safari, and Firefox
-    // false in IE and Opera on Windows
-    var normalizesNewlines = (function () {
-        var textarea = document.createElement('textarea');
-        textarea.value = '\r\n';
-        return textarea.value === '\n';
-    }());
-    ```
+```javascript
+// true in Chrome, Safari, and Firefox
+// false in IE and Opera on Windows
+var normalizesNewlines = (function () {
+    var textarea = document.createElement('textarea');
+    textarea.value = '\r\n';
+    return textarea.value === '\n';
+}());
+```
+
+## Browser Bugs
+
+### Selecting Newlines in IE 6-8
+
+There's a bug in IE 6-8 that prevents ```.range()``` from parsing a selection that **_ends_** with newlines.
+
+For example, suppose we have a ```<textarea>``` with the following value:
+
+    ABC¶
+    ¶
+    DEF
+
+If we select the two newlines with the mouse as shown below (indicated by ```[``` and ```]```):
+
+    ABC[¶
+    ¶]
+    DEF
+
+```.range()``` will _incorrectly_ return ```{ start: 3, end: 3, length: 0, text: '' }``` in IE 6-8.
+All other browsers (including IE9+) will return ```{ start: 3, end: 5, length: 2, text: '\n\n' }```.
+
+Similarly, if we select ```C``` and the two newlines following it, as shown below:
+
+    AB[C¶
+    ¶]
+    DEF
+
+```.range()``` will _incorrectly_ return ```{ start: 2, end: 3, length: 1, text: 'C' }``` in IE 6-8.
+All other browsers (including IE9+) will return ```{ start: 2, end: 5, length: 3, text: 'C\n\n' }```.
+
+However, if we select the two newlines followed by the letter ```D```, as shown below:
+
+    ABC[¶
+    ¶
+    D]EF
+
+```.range()``` will **correctly** return ```{ start: 3, end: 6, length: 3, text: '\n\nD' }``` in all browsers (including IE 6-8).
+
+Run ```test/newline-range.html``` in IE 6-8 and try the above examples to see the bug in action.
+
+### Deselecting Text in IE 6-10
+
+In all versions of IE (6-10), clicking _inside_ a text selection returns the wrong range.
+
+Run ```test/newline-range.html``` in any version of IE and select some text in the textarea.
+Then click anywhere **inside** the selection (without moving the mouse) to see the bug in action.
+Clicking _outside_ the selection works just fine.
 
 License
 =======
-
-MIT license.  See MIT-LICENSE.txt.
 
 [sitepoint-line-endings]: http://www.sitepoint.com/line-endings-in-javascript/
 [stackoverflow-newline]: http://stackoverflow.com/a/1156388/467582
