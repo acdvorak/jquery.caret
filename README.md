@@ -218,44 +218,6 @@ While not necessarily a huge issue, it's something to be aware of.
 
 # Browser Bugs
 
-## Selecting Newlines in IE 6-8
-
-There's a bug in IE 6-8 that prevents ```.range()``` from parsing a selection that **_ends_** with newlines.
-
-For example, suppose we have a ```<textarea>``` with the following value:
-
-    ABC¶
-    ¶
-    DEF
-
-If we select the two newlines with the mouse as shown below (indicated by ```[``` and ```]```):
-
-    ABC[¶
-    ¶]
-    DEF
-
-```.range()``` will _incorrectly_ return ```{ start: 3, end: 3, length: 0, text: '' }``` in IE 6-8.
-All other browsers (including IE9+) will return ```{ start: 3, end: 5, length: 2, text: '\n\n' }```.
-
-Similarly, if we select ```C``` and the two newlines following it, as shown below:
-
-    AB[C¶
-    ¶]
-    DEF
-
-```.range()``` will _incorrectly_ return ```{ start: 2, end: 3, length: 1, text: 'C' }``` in IE 6-8.
-All other browsers (including IE9+) will return ```{ start: 2, end: 5, length: 3, text: 'C\n\n' }```.
-
-However, if we select the two newlines followed by the letter ```D```, as shown below:
-
-    ABC[¶
-    ¶
-    D]EF
-
-```.range()``` will **correctly** return ```{ start: 3, end: 6, length: 3, text: '\n\nD' }``` in all browsers (including IE 6-8).
-
-Run ```test/newline-range.html``` in IE 6-8 and try the above examples to see the bug in action.
-
 ## Deselecting Text in IE 6-10
 
 In all versions of IE (6-10), clicking _inside_ selected text returns the wrong selection range and caret position.
