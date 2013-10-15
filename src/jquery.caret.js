@@ -533,7 +533,7 @@
          * Selects all text in each element of this jQuery object.
          * @returns {jQuery} This jQuery object
          * @see http://stackoverflow.com/a/11128179/467582
-         * @since 1.1.0
+         * @since 1.5.0
          * @example
          * <pre>
          *     // Select the contents of span elements when clicked
