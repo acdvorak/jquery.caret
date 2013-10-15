@@ -1,7 +1,7 @@
 jQuery Caret Plugin
 ===================
 
-## v1.3.0
+## v1.4.0
 
 Cross-browser jQuery plugin that allows you to manipulate the cursor position and selection range
 of ```<input>``` and ```<textarea>``` elements, as well as highlight text on the page.

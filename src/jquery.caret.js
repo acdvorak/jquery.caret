@@ -1,4 +1,4 @@
-/*! jQuery Caret plugin v1.3.0 | (c) 2012, 2013 Andrew C. Dvorak | github.com/acdvorak/jquery.caret */
+/*! jQuery Caret plugin v1.4.0 | (c) 2012, 2013 Andrew C. Dvorak | github.com/acdvorak/jquery.caret */
 (function($, undefined) {
 
     var _input = document.createElement('input');
@@ -355,6 +355,7 @@
         // Now that we know what the user selected, we can replace it
         var startText = oldValue.substr(0, selection.start);
         var endText = oldValue.substr(selection.end);
+
         $input.val(startText + text + endText);
 
         // Reset the selection
