@@ -402,7 +402,13 @@
      * Select all text in the given element.
      * @param {HTMLElement} elem Any block or inline element other than a form element.
      */
-    var _highlight = function(elem) {
+    var _selectAll = function(elem) {
+        var $elem = $(elem);
+        if ($elem.is('input, textarea') || elem.select) {
+            $elem.select();
+            return;
+        }
+
         // Mozilla, et al.
         if (_support.setSelectionRange) {
             _selectAllW3(elem);
@@ -517,19 +523,19 @@
         },
 
         /**
-         * Highlights (selects) all text in each element of this jQuery object.
+         * Selects all text in each element of this jQuery object.
          * @returns {jQuery} This jQuery object
          * @see http://stackoverflow.com/a/11128179/467582
          * @since 1.1.0
          * @example
          * <pre>
-         *     // Highlight the contents of span elements when clicked
+         *     // Select the contents of span elements when clicked
          *     $('span').on('click', function() { $(this).highlight(); });
          * </pre>
          */
-        highlight: function() {
+        selectAll: function() {
             return this.each(function(_i, elem) {
-                _highlight(elem);
+                _selectAll(elem);
             });
         }
 

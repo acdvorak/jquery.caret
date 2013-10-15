@@ -21,7 +21,7 @@ Features
 *   Insert text at cursor position
 *   Replace selected range with text
 *   Handles differences in line endings between browsers
-*   Select all text within a child-bearing element (e.g., ```<div>``` or ```<span>```)
+*   Select all text within any element
 
 API
 ===
@@ -124,13 +124,13 @@ Examples:
     // Same as inserting text via $('input').caret(2).caret('llo Wor')
     $('input').val('Held').range(2, 2).range('llo Wor').val() === 'Hello World';
 
-## Highlight
+## Select All
 
-    $.fn.highlight()
+    $.fn.selectAll()
 
-Highlights (selects) all text in child-bearing elements (e.g., ```<span>```, ```<div>```, but not ```<input>``` or ```<br/>```).
+Selects all text in any element (```div```, ```span```, ```input```, ```textarea```, ```label```, etc.).
 
-### ```.highlight()``` returns ```jQuery```
+### ```.selectAll()``` returns ```jQuery```
 
 Types
 =====
