@@ -150,6 +150,8 @@
     var _setCaret = function(input, pos) {
         input.focus();
 
+        pos = _getIndex(input, pos);
+
         // Mozilla, et al.
         if (_support.setSelectionRange) {
             _setCaretW3(input, pos);
@@ -296,6 +298,9 @@
      * @see http://stackoverflow.com/a/2966703/467582
      */
     var _setInputRange = function(input, startPos, endPos) {
+        startPos = _getIndex(input, startPos);
+        endPos = _getIndex(input, endPos);
+
         // Mozilla, et al.
         if (_support.setSelectionRange) {
             _setInputRangeW3(input, startPos, endPos);
@@ -402,9 +407,8 @@
             }
             // setCaret(position)
             else if (typeof arguments[0] === 'number') {
-                var arg0 = arguments[0];
+                var pos = arguments[0];
                 $inputs.each(function(_i, input) {
-                    var pos = _getIndex(input, arg0);
                     _setCaret(input, pos);
                 });
             }
@@ -454,11 +458,9 @@
             }
             // setRange(startPos, endPos)
             else if (typeof arguments[0] === 'number') {
-                var arg0 = arguments[0];
-                var arg1 = arguments[1];
+                var startPos = arguments[0];
+                var endPos = arguments[1];
                 $inputs.each(function(_i, input) {
-                    var startPos = _getIndex(input, arg0),
-                        endPos = _getIndex(input, arg1);
                     _setInputRange(input, startPos, endPos);
                 });
             }
