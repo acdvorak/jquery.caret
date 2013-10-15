@@ -266,7 +266,6 @@
         // Fix IE from counting the newline characters as two separate characters
         var stop_it = startPos;
 
-
         // TODO: Optimize this awful code
         for (i = 0; i < stop_it; i++) {
             if (input.value.substr(i, 1).search(_rNewlineIE) !== -1) {
