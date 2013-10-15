@@ -35,6 +35,20 @@
             ok([ 0, length ].indexOf(actualRange.start) !== -1, message);
         },
 
+        /**
+         * Asserts that the actual {@link Range} has a length of zero (0), empty text (''), equal start/end positions,
+         * and a start/end position that matches the expected value.
+         * @param {Range} actualRange
+         * @param {Number} expectedPos Expected caret position of the zero-length range
+         * @param {String} message Message to display if the assertion fails
+         */
+        isEmptyRange: function(actualRange, expectedPos, message) {
+            ok(actualRange.length === 0, message);
+            ok(actualRange.text === '', message);
+            ok(actualRange.start === actualRange.end, message);
+            ok([ 0, expectedPos ].indexOf(actualRange.start) !== -1, message);
+        },
+
         equalsString: function(actual, expected, message) {
             ok(actual && expected && JSON.stringify(actual) === JSON.stringify(expected), message);
         }
@@ -440,6 +454,107 @@
                         assert($textarea.range(2.5).range()).equalsString($textarea.range(2, 7).range());
                         assert($textarea.range(1.5, 3.5).range()).equalsString($textarea.range(1, 3).range());
                         assert($textarea.range(2.5, 4.5).range()).equalsString($textarea.range(2, 4).range());
+                    });
+                });
+
+                describe('Insert', function() {
+                    it("Prepends text", function() {
+                        assert($input.val('abc').range(0, 0).range('123').val()).equals('123abc');
+
+                        assert($textarea.val('abc\ndef').range(0, 0).range('123').val()).equals('123abc\ndef');
+                    });
+
+                    it("Appends text", function() {
+                        assert($input.val('abc').range(3, 3).range('123').val()).equals('abc123');
+                        assert($input.val('abc').range(4, 4).range('123').val()).equals('abc123');
+
+                        assert($textarea.val('abc\ndef').range(7, 7).range('123').val()).equals('abc\ndef123');
+                        assert($textarea.val('abc\ndef').range(8, 8).range('123').val()).equals('abc\ndef123');
+                    });
+
+                    it("Inserts text", function() {
+                        assert($input.val('abcdef').range(3, 3).range('123').val()).equals('abc123def');
+
+                        assert($textarea.val('abc\ndef').range(3, 3).range('123').val()).equals('abc123\ndef');
+                        assert($textarea.val('abc\ndef').range(4, 4).range('123').val()).equals('abc\n123def');
+                    });
+
+                    it("Respects maxlength attribute", function() {
+                        $input.attr('maxlength', 5);
+                        assert($input.val('abc').range(0, 0).range('123').val()).equals('12abc');
+                        assert($input.val('abc').range(3, 3).range('123').val()).equals('abc12');
+                        assert($input.val('abcde').range(0, 0).range('123').val()).equals('abcde');
+                        assert($input.val('abcde').range(3, 3).range('123').val()).equals('abcde');
+                        assert($input.val('abcde').range(5, 5).range('123').val()).equals('abcde');
+
+                        $textarea.attr('maxlength', 9);
+                        assert($textarea.val('abc\ndef').range(0, 0).range('123').val()).equals('12abc\ndef');
+                        assert($textarea.val('abc\ndef').range(3, 3).range('123').val()).equals('abc12\ndef');
+                        assert($textarea.val('abc\ndef').range(4, 4).range('123').val()).equals('abc\n12def');
+                        assert($textarea.val('abc\ndef\ng').range(0, 0).range('123').val()).equals('abc\ndef\ng');
+                        assert($textarea.val('abc\ndef\ng').range(3, 3).range('123').val()).equals('abc\ndef\ng');
+                        assert($textarea.val('abc\ndef\ng').range(5, 5).range('123').val()).equals('abc\ndef\ng');
+                    });
+
+                    it("Sets the caret position after inserting text", function() {
+                        $input.attr('maxlength', 5);
+                        assert($input.val('').range(0, 0).range('123').range()).isEmptyRange(3);
+                        assert($input.val('abc').range(0, 0).range('12').range()).isEmptyRange(2);
+                        assert($input.val('abc').range(1, 1).range('12').range()).isEmptyRange(3);
+                        assert($input.val('abc').range(3, 3).range('1').range()).isEmptyRange(4);
+                        assert($input.val('abc').range(0, 0).range('123').range()).isEmptyRange(2);
+                        assert($input.val('abc').range(3, 3).range('123').range()).isEmptyRange(5);
+                        assert($input.val('abcde').range(0, 0).range('123').range()).isEmptyRange(0);
+                        assert($input.val('abcde').range(3, 3).range('123').range()).isEmptyRange(3);
+                        assert($input.val('abcde').range(5, 5).range('123').range()).isEmptyRange(5);
+
+                        $textarea.attr('maxlength', 9);
+                        assert($textarea.val('').range(0, 0).range('123').range()).isEmptyRange(3);
+                        assert($textarea.val('abc\ndef').range(0, 0).range('12').range()).isEmptyRange(2);
+                        assert($textarea.val('abc\ndef').range(1, 1).range('12').range()).isEmptyRange(3);
+                        assert($textarea.val('abc\ndef').range(3, 3).range('1').range()).isEmptyRange(4);
+                        assert($textarea.val('abc\ndef').range(0, 0).range('123').range()).isEmptyRange(2);
+                        assert($textarea.val('abc\ndef').range(3, 3).range('123').range()).isEmptyRange(5);
+                        assert($textarea.val('abc\ndef').range(4, 4).range('123').range()).isEmptyRange(6);
+                        assert($textarea.val('abc\ndef\ng').range(0, 0).range('123').range()).isEmptyRange(0);
+                        assert($textarea.val('abc\ndef\ng').range(3, 3).range('123').range()).isEmptyRange(3);
+                        assert($textarea.val('abc\ndef\ng').range(5, 5).range('123').range()).isEmptyRange(5);
+                    });
+                });
+
+                describe('Replace', function() {
+                    it("Replaces text", function() {
+                        assert($input.val('abcdef').range(0, 3).range('123').val()).equals('123def');
+                        assert($input.val('abcdef').range(3, 6).range('123').val()).equals('abc123');
+                        assert($input.val('abcdef').range(2, 4).range('123').val()).equals('ab123ef');
+                        assert($input.val('abcdef').range(0, 6).range('123').val()).equals('123');
+
+                        assert($textarea.val('abc\ndef').range(0, 3).range('123').val()).equals('123\ndef');
+                        assert($textarea.val('abc\ndef').range(4, 7).range('123').val()).equals('abc\n123'); // FIXME in IE
+                        assert($textarea.val('abc\ndef').range(2, 5).range('123').val()).equals('ab123ef');
+                        assert($textarea.val('abc\ndef').range(0, 7).range('123').val()).equals('123');
+                    });
+
+                    it("Respects maxlength attribute", function() {
+                        $input.attr('maxlength', 5);
+                        assert($input.val('abc').range(0, 1).range('123456').val()).equals('123bc');
+                        assert($input.val('abc').range(2, 3).range('123456').val()).equals('ab123');
+                        assert($input.val('abc').range(1, 2).range('123456').val()).equals('a123c');
+                        assert($input.val('abc').range(0, 3).range('123456').val()).equals('12345');
+                        assert($input.val('abcde').range(0, 1).range('123456').val()).equals('1bcde');
+                        assert($input.val('abcde').range(4, 5).range('123456').val()).equals('abcd1');
+                        assert($input.val('abcde').range(2, 3).range('123456').val()).equals('ab1de');
+                        assert($input.val('abcde').range(0, 5).range('123456').val()).equals('12345');
+
+                        $textarea.attr('maxlength', 9);
+                        assert($textarea.val('abc\ndef').range(0, 3).range('123456').val()).equals('12345\ndef');
+                        assert($textarea.val('abc\ndef').range(4, 7).range('123456').val()).equals('abc\n12345'); // FIXME in IE
+                        assert($textarea.val('abc\ndef').range(2, 5).range('123456').val()).equals('ab12345ef');
+                        assert($textarea.val('abc\ndef').range(0, 7).range('1234567890').val()).equals('123456789');
+                        assert($textarea.val('abc\ndef\ng').range(0, 1).range('123456').val()).equals('1bc\ndef\ng');
+                        assert($textarea.val('abc\ndef\ng').range(8, 9).range('123456').val()).equals('abc\ndef\n1'); // FIXME in IE
+                        assert($textarea.val('abc\ndef\ng').range(4, 5).range('123456').val()).equals('abc\n1ef\ng'); // FIXME in IE
+                        assert($textarea.val('abc\ndef\ng').range(0, 9).range('1234567890').val()).equals('123456789');
                     });
                 });
 
