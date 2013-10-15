@@ -23,16 +23,16 @@
 
         /**
          * Asserts that the actual {@link Range} has a length of zero (0), empty text (''), equal start/end positions,
-         * and a start/end position that matches one of the expected start/end positions.
-         * @param {Range} actual
+         * and a start/end position of zero (0) or value.length.
+         * @param {Range} actualRange
          * @param {Number} length Length of the input/textarea's value
          * @param {String} message Message to display if the assertion fails
          */
-        isEmptyRange: function(actual, length, message) {
-            ok(actual.length === 0, message);
-            ok(actual.text === '', message);
-            ok(actual.start === actual.end, message);
-            ok([ 0, length ].indexOf(actual.start) !== -1, message);
+        isDefaultRange: function(actualRange, length, message) {
+            ok(actualRange.length === 0, message);
+            ok(actualRange.text === '', message);
+            ok(actualRange.start === actualRange.end, message);
+            ok([ 0, length ].indexOf(actualRange.start) !== -1, message);
         },
 
         equalsString: function(actual, expected, message) {
@@ -319,23 +319,23 @@
                         // In IE and FF, the caret remains at index 0 the first time a value is set;
                         // the second time a value is set, the caret moves to the end of the input/textarea.
 
-                        assert($input.val('abcdef').range()).isEmptyRange(6);
-                        assert($input.val('abcdef').range()).isEmptyRange(6);
+                        assert($input.val('abcdef').range()).isDefaultRange(6);
+                        assert($input.val('abcdef').range()).isDefaultRange(6);
 
-                        assert($textarea.val('abc\ndef').range()).isEmptyRange(7);
-                        assert($textarea.val('abc\ndef').range()).isEmptyRange(7);
+                        assert($textarea.val('abc\ndef').range()).isDefaultRange(7);
+                        assert($textarea.val('abc\ndef').range()).isDefaultRange(7);
                     });
 
                     it("Returns zero (0) or value.length when the input's value changes", function() {
-                        assert($input.val(_short).range()).isEmptyRange(_short.length);
-                        assert($input.val(_long).range()).isEmptyRange(_long.length);
-                        assert($input.val(_short).range()).isEmptyRange(_short.length);
-                        assert($input.val(_empty).range()).isEmptyRange(_empty.length);
+                        assert($input.val(_short).range()).isDefaultRange(_short.length);
+                        assert($input.val(_long).range()).isDefaultRange(_long.length);
+                        assert($input.val(_short).range()).isDefaultRange(_short.length);
+                        assert($input.val(_empty).range()).isDefaultRange(_empty.length);
 
-                        assert($textarea.val(_short).range()).isEmptyRange(_short.length);
-                        assert($textarea.val(_long).range()).isEmptyRange(_long.length);
-                        assert($textarea.val(_short).range()).isEmptyRange(_short.length);
-                        assert($textarea.val(_empty).range()).isEmptyRange(_empty.length);
+                        assert($textarea.val(_short).range()).isDefaultRange(_short.length);
+                        assert($textarea.val(_long).range()).isDefaultRange(_long.length);
+                        assert($textarea.val(_short).range()).isDefaultRange(_short.length);
+                        assert($textarea.val(_empty).range()).isDefaultRange(_empty.length);
                     });
 
                     it("Handles zero-length selections", function() {
