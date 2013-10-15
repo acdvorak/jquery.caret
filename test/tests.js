@@ -382,6 +382,9 @@
                         assert($textarea.range(0, 7).range()).equals(_s({ start: 0, end: 7, length: 7, text: 'abc\ndef' }));
                         assert($textarea.range(2, 5).range()).equals(_s({ start: 2, end: 5, length: 3, text: 'c\nd' }));
                         assert($textarea.range(3, 4).range()).equals(_s({ start: 3, end: 4, length: 1, text: '\n' }));
+                        assert($textarea.range(4, 5).range()).equals(_s({ start: 4, end: 5, length: 1, text: 'd' }));
+                        assert($textarea.range(4, 6).range()).equals(_s({ start: 4, end: 6, length: 2, text: 'de' }));
+                        assert($textarea.range(4, 7).range()).equals(_s({ start: 4, end: 7, length: 3, text: 'def' }));
                     });
 
                     it("Normalizes newlines", function() {

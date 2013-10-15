@@ -218,10 +218,21 @@
         tr_selection.moveToBookmark(selection.getBookmark());
         tr_beginning.setEndPoint('EndToStart', tr_selection);
 
+        var norm = input.value.replace(_rNewlineIE, '\n');
+
         range.start = tr_beginning.text.replace(_rNewlineIE, '\n').length;
         range.text = selection.text.replace(_rNewlineIE, '\n').replace(_rCarriageReturn, '\n');
-
         range.length = range.text.length;
+
+        // IE always removes trailing newlines from the end of a selection.
+        // When the user selects text AFTER a newline, tr_beginning will not include the newline(s)
+        // before the selected text, so we have to make up the difference.
+        // E.G.: The user selects "DEF" in "abc\nDEF": tr_beginning will only include "abc" instead of "abc\n",
+        // which means the start position will be incorrect.
+        while (norm.substr(range.start, range.length) !== range.text && range.start < norm.length) {
+            range.start++;
+        }
+
         range.end = range.start + range.length;
 
         if(range.length === 0) {
