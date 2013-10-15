@@ -22,8 +22,23 @@
         });
     };
 
+    var _getValue = function(input) {
+        if (typeof(input.value) !== 'undefined') {
+            return input.value
+        }
+        return $(input).text();
+    };
+
+    var _setValue = function(input, value) {
+        if (typeof(input.value) !== 'undefined') {
+            input.value = value;
+        } else {
+            $(input).text(value);
+        }
+    };
+
     var _getIndex = function(input, pos) {
-        var norm = input.value.replace(_rCarriageReturn, '');
+        var norm = _getValue(input).replace(_rCarriageReturn, '');
         var len = norm.length;
 
         if (typeof(pos) === 'undefined') {
@@ -71,7 +86,7 @@
      * @see http://stackoverflow.com/q/6943000/467582
      */
     var _getCaretIE = function(input) {
-        var caret, range, textInputRange, len, endRange;
+        var caret, range, textInputRange, rawValue, len, endRange;
 
         // Yeah, you have to focus twice for IE 7 and 8.  *cries*
         input.focus();
@@ -80,7 +95,9 @@
         range = document.selection.createRange();
 
         if (range && range.parentElement() === input) {
-            len = input.value.length;
+            rawValue = _getValue(input);
+
+            len = rawValue.length;
 
             // Create a working TextRange that lives only in the input
             textInputRange = input.createTextRange();
@@ -93,7 +110,7 @@
             endRange.collapse(false);
 
             if (textInputRange.compareEndPoints("StartToEnd", endRange) > -1) {
-                caret = input.value.replace(_rNewlineIE, '\n').length;
+                caret = rawValue.replace(_rNewlineIE, '\n').length;
             } else {
                 caret = -textInputRange.moveStart("character", -len);
             }
@@ -171,7 +188,7 @@
     var _insertAtCaret = function(input, text) {
         var curPos = _getCaret(input);
 
-        var oldValueNorm = input.value.replace(_rCarriageReturn, '');
+        var oldValueNorm = _getValue(input).replace(_rCarriageReturn, '');
 
         var newLength = +(curPos + text.length + (oldValueNorm.length - curPos));
         var maxLength = +input.getAttribute('maxlength');
@@ -181,7 +198,7 @@
             text = text.substr(0, delta);
         }
 
-        input.value = oldValueNorm.substr(0, curPos) + text + oldValueNorm.substr(curPos);
+        _setValue(input, oldValueNorm.substr(0, curPos) + text + oldValueNorm.substr(curPos));
 
         _setCaret(input, curPos + text.length);
     };
@@ -196,7 +213,7 @@
         var max = Math.max(range.start, range.end);
 
         range.length = max - min;
-        range.text = input.value.substring(min, max);
+        range.text = _getValue(input).substring(min, max);
 
         return range;
     };
@@ -211,9 +228,10 @@
 
         if (selection && selection.parentElement() === input) {
             var len, normalizedValue, textInputRange, endRange, start = 0, end = 0;
+            var rawValue = _getValue(input);
 
-            len = input.value.length;
-            normalizedValue = input.value.replace(/\r\n/g, "\n");
+            len = rawValue.length;
+            normalizedValue = rawValue.replace(/\r\n/g, "\n");
 
             // Create a working TextRange that lives only in the input
             textInputRange = input.createTextRange();
@@ -240,8 +258,8 @@
             }
 
             /// normalize newlines
-            start -= (input.value.substring(0, start).split('\r\n').length - 1);
-            end -= (input.value.substring(0, end).split('\r\n').length - 1);
+            start -= (rawValue.substring(0, start).split('\r\n').length - 1);
+            end -= (rawValue.substring(0, end).split('\r\n').length - 1);
             /// normalize newlines
 
             range.start = start;
@@ -284,13 +302,14 @@
     var _setInputRangeIE = function(input, startPos, endPos) {
         var i;
         var tr = input.createTextRange();
+        var rawValue = _getValue(input);
 
         // Fix IE from counting the newline characters as two separate characters
         var stop_it = startPos;
 
         // TODO: Optimize this awful code
         for (i = 0; i < stop_it; i++) {
-            if (input.value.substr(i, 1).search(_rNewlineIE) !== -1) {
+            if (rawValue.substr(i, 1).search(_rNewlineIE) !== -1) {
                 startPos = startPos - 1;
             }
         }
@@ -299,7 +318,7 @@
 
         // TODO: Optimize this awful code
         for (i = 0; i < stop_it; i++) {
-            if (input.value.substr(i, 1).search(_rNewlineIE) !== -1) {
+            if (rawValue.substr(i, 1).search(_rNewlineIE) !== -1) {
                 endPos = endPos - 1;
             }
         }
