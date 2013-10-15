@@ -43,10 +43,10 @@
          * @param {String} message Message to display if the assertion fails
          */
         isEmptyRange: function(actualRange, expectedPos, message) {
-            ok(actualRange.length === 0, message);
-            ok(actualRange.text === '', message);
-            ok(actualRange.start === actualRange.end, message);
-            ok([ 0, expectedPos ].indexOf(actualRange.start) !== -1, message);
+            strictEqual(actualRange.length, 0, message);
+            strictEqual(actualRange.text, '', message);
+            strictEqual(actualRange.start, actualRange.end, message);
+            notStrictEqual([ 0, expectedPos ].indexOf(actualRange.start), -1, message);
         },
 
         equalsString: function(actual, expected, message) {
