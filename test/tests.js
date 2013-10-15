@@ -534,6 +534,7 @@
 
                         assert($textarea.val('abc\ndef').range(0, 3).range('123').val()).equals('123\ndef');
                         assert($textarea.val('abc\ndef').range(4, 7).range('123').val()).equals('abc\n123');
+
                         assert($textarea.val('abc\ndef').range(2, 5).range('123').val()).equals('ab123ef');
                         assert($textarea.val('abc\ndef').range(0, 7).range('123').val()).equals('123');
                     });
@@ -559,9 +560,57 @@
                         assert($textarea.val('abc\ndef\ng').range(4, 5).range('123456').val()).equals('abc\n1ef\ng');
                         assert($textarea.val('abc\ndef\ng').range(0, 9).range('1234567890').val()).equals('123456789');
                     });
-                });
 
-                it("TODO: Test range positions AFTER replacement/insertion");
+                    it("Sets the caret position after inserting text", function() {
+                        $input.attr('maxlength', 5);
+                        assert($input.val('').range(0, 0).range('123456').range()).isEmptyRange(5);
+                        assert($input.val('abc').range(0, 0).range('12').range()).isEmptyRange(2);
+                        assert($input.val('abc').range(1, 1).range('12').range()).isEmptyRange(3);
+                        assert($input.val('abc').range(3, 3).range('1').range()).isEmptyRange(4);
+                        assert($input.val('abc').range(0, 0).range('123456').range()).isEmptyRange(2);
+                        assert($input.val('abc').range(3, 3).range('123456').range()).isEmptyRange(5);
+                        assert($input.val('abcde').range(0, 0).range('123456').range()).isEmptyRange(0);
+                        assert($input.val('abcde').range(3, 3).range('123456').range()).isEmptyRange(3);
+                        assert($input.val('abcde').range(5, 5).range('123456').range()).isEmptyRange(5);
+
+                        $textarea.attr('maxlength', 9);
+                        assert($textarea.val('').range(0, 0).range('123456').range()).isEmptyRange(6);
+                        assert($textarea.val('abc\ndef').range(0, 0).range('12').range()).isEmptyRange(2);
+                        assert($textarea.val('abc\ndef').range(1, 1).range('12').range()).isEmptyRange(3);
+                        assert($textarea.val('abc\ndef').range(3, 3).range('1').range()).isEmptyRange(4);
+                        assert($textarea.val('abc\ndef').range(0, 0).range('123456').range()).isEmptyRange(2);
+                        assert($textarea.val('abc\ndef').range(3, 3).range('123456').range()).isEmptyRange(5);
+                        assert($textarea.val('abc\ndef').range(4, 4).range('123456').range()).isEmptyRange(6);
+                        assert($textarea.val('abc\ndef\ng').range(0, 0).range('123456').range()).isEmptyRange(0);
+                        assert($textarea.val('abc\ndef\ng').range(3, 3).range('123456').range()).isEmptyRange(3);
+                        assert($textarea.val('abc\ndef\ng').range(5, 5).range('123456').range()).isEmptyRange(5);
+                    });
+
+                    it("Sets the selection range after replacing text", function() {
+                        $input.attr('maxlength', 5);
+                        assert($input.val('abc').range(0, 1).range('12').range()).equalsString({ start: 0, end: 2, length: 2, text: '12' });
+                        assert($input.val('abc').range(1, 2).range('12').range()).equalsString({ start: 1, end: 3, length: 2, text: '12' });
+                        assert($input.val('abc').range(2, 3).range('12').range()).equalsString({ start: 2, end: 4, length: 2, text: '12' });
+                        assert($input.val('abc').range(0, 3).range('12').range()).equalsString({ start: 0, end: 2, length: 2, text: '12' });
+                        assert($input.val('abc').range(0, 3).range('123456').range()).equalsString({ start: 0, end: 5, length: 5, text: '12345' });
+                        assert($input.val('abcde').range(0, 1).range('123456').range()).equalsString({ start: 0, end: 1, length: 1, text: '1' });
+                        assert($input.val('abcde').range(2, 3).range('123456').range()).equalsString({ start: 2, end: 3, length: 1, text: '1' });
+                        assert($input.val('abcde').range(4, 5).range('123456').range()).equalsString({ start: 4, end: 5, length: 1, text: '1' });
+
+                        $textarea.attr('maxlength', 9);
+                        assert($textarea.val('abc\ndef').range(0, 3).range('123456').range()).equalsString({ start: 0, end: 5, length: 5, text: '12345' });
+                        assert($textarea.val('abc\ndef').range(2, 5).range('123456').range()).equalsString({ start: 2, end: 7, length: 5, text: '12345' });
+                        assert($textarea.val('abc\ndef').range(4, 7).range('123456').range()).equalsString({ start: 4, end: 9, length: 5, text: '12345' });
+                        assert($textarea.val('abc\ndef').range(0, 7).range('1234567890').range()).equalsString({ start: 0, end: 9, length: 9, text: '123456789' });
+                        assert($textarea.val('abc\ndef').range(3, 4).range('123456').range()).equalsString({ start: 3, end: 6, length: 3, text: '123' });
+                        assert($textarea.val('abc\ndef').range(2, 4).range('123456').range()).equalsString({ start: 2, end: 6, length: 4, text: '1234' });
+                        assert($textarea.val('abc\ndef').range(3, 5).range('123456').range()).equalsString({ start: 3, end: 7, length: 4, text: '1234' });
+                        assert($textarea.val('abc\ndef\ng').range(0, 9).range('1234567890').range()).equalsString({ start: 0, end: 9, length: 9, text: '123456789' });
+                        assert($textarea.val('abc\ndef\ng').range(0, 1).range('123456').range()).equalsString({ start: 0, end: 1, length: 1, text: '1' });
+                        assert($textarea.val('abc\ndef\ng').range(8, 9).range('123456').range()).equalsString({ start: 8, end: 9, length: 1, text: '1' });
+                        assert($textarea.val('abc\ndef\ng').range(5, 6).range('123456').range()).equalsString({ start: 5, end: 6, length: 1, text: '1' });
+                    });
+                });
             });
         });
 
