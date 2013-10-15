@@ -549,6 +549,19 @@
     });
 
     $.extend({
+        /**
+         * Deselects all text on the page.
+         * @returns {jQuery} The jQuery function
+         * @since 1.5.0
+         * @example
+         * <pre>
+         *     // Select some text
+         *     $('span').selectAll();
+         *
+         *     // Deselect the text
+         *     $.deselectAll();
+         * </pre>
+         */
         deselectAll: function() {
             _deselectAll();
             return this;
