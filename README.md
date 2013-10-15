@@ -36,7 +36,7 @@ Interrogate and manipulate the cursor position of an input field at a single poi
 
 Get the cursor position of the first matched element.  If one or more characters are selected, the start position of the selected range is returned.
 
-### ```.caret(pos)``` returns ```jQuery```
+### ```.caret(pos)``` returns ```jQuery``` object
 
 Set the cursor position of the first matched element.
 
@@ -53,7 +53,7 @@ Examples:
     $('input').caret(-3);
     $('input').val('Hello World').caret(-3).caret() === 8;
 
-### ```.caret(text)``` returns ```jQuery```
+### ```.caret(text)``` returns ```jQuery``` object
 
 Insert text at the current cursor position of the first matched element and place the cursor _after_ the inserted text.
 
@@ -77,7 +77,7 @@ Interrogate and manipulate the selected range of an input field.
 Get the selected range (start and end position) of the first matched element, along with the value of the selected text and its length.
 If no text is selected, the ```start``` and ```end``` position will be equal to the cursor position returned by ```.caret()```.
 
-### ```.range(startPos [ , endPos ])``` returns ```jQuery```
+### ```.range(startPos [ , endPos ])``` returns ```jQuery``` object
 
 Set the selection range of the first matched element.
 
@@ -108,7 +108,7 @@ Examples:
     $('input').range(-8, -3);
     $('textarea').val('Hello\nWorld').range(-8, -3).range().text === 'lo\nWo';
 
-### ```.range(text)``` returns ```jQuery```
+### ```.range(text)``` returns ```jQuery``` object
 
 Replace the currently selected text of the first matched element with the given text and select the newly inserted text.
 
@@ -130,7 +130,7 @@ Examples:
 
 Selects all text in any element (```div```, ```span```, ```input```, ```textarea```, ```label```, etc.).
 
-### ```.selectAll()``` returns ```jQuery```
+### ```.selectAll()``` returns ```jQuery``` object
 
 ## Deselect All
 
