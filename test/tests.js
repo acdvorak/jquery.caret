@@ -381,7 +381,7 @@
                         $textarea.val('abc\ndef');
                         assert($textarea.range(0, 7).range()).equals(_s({ start: 0, end: 7, length: 7, text: 'abc\ndef' }));
                         assert($textarea.range(2, 5).range()).equals(_s({ start: 2, end: 5, length: 3, text: 'c\nd' }));
-                        assert($textarea.range(3, 4).range()).equals(_s({ start: 3, end: 4, length: 1, text: '\n' }));
+                        assert($textarea.range(3, 4).range()).equals(_s({ start: 3, end: 4, length: 1, text: '\n' })); // NOTE: We know this fails in IE
                         assert($textarea.range(4, 5).range()).equals(_s({ start: 4, end: 5, length: 1, text: 'd' }));
                         assert($textarea.range(4, 6).range()).equals(_s({ start: 4, end: 6, length: 2, text: 'de' }));
                         assert($textarea.range(4, 7).range()).equals(_s({ start: 4, end: 7, length: 3, text: 'def' }));
@@ -533,7 +533,7 @@
                         assert($input.val('abcdef').range(0, 6).range('123').val()).equals('123');
 
                         assert($textarea.val('abc\ndef').range(0, 3).range('123').val()).equals('123\ndef');
-                        assert($textarea.val('abc\ndef').range(4, 7).range('123').val()).equals('abc\n123'); // FIXME in IE
+                        assert($textarea.val('abc\ndef').range(4, 7).range('123').val()).equals('abc\n123');
                         assert($textarea.val('abc\ndef').range(2, 5).range('123').val()).equals('ab123ef');
                         assert($textarea.val('abc\ndef').range(0, 7).range('123').val()).equals('123');
                     });
@@ -551,12 +551,12 @@
 
                         $textarea.attr('maxlength', 9);
                         assert($textarea.val('abc\ndef').range(0, 3).range('123456').val()).equals('12345\ndef');
-                        assert($textarea.val('abc\ndef').range(4, 7).range('123456').val()).equals('abc\n12345'); // FIXME in IE
+                        assert($textarea.val('abc\ndef').range(4, 7).range('123456').val()).equals('abc\n12345');
                         assert($textarea.val('abc\ndef').range(2, 5).range('123456').val()).equals('ab12345ef');
                         assert($textarea.val('abc\ndef').range(0, 7).range('1234567890').val()).equals('123456789');
                         assert($textarea.val('abc\ndef\ng').range(0, 1).range('123456').val()).equals('1bc\ndef\ng');
-                        assert($textarea.val('abc\ndef\ng').range(8, 9).range('123456').val()).equals('abc\ndef\n1'); // FIXME in IE
-                        assert($textarea.val('abc\ndef\ng').range(4, 5).range('123456').val()).equals('abc\n1ef\ng'); // FIXME in IE
+                        assert($textarea.val('abc\ndef\ng').range(8, 9).range('123456').val()).equals('abc\ndef\n1');
+                        assert($textarea.val('abc\ndef\ng').range(4, 5).range('123456').val()).equals('abc\n1ef\ng');
                         assert($textarea.val('abc\ndef\ng').range(0, 9).range('1234567890').val()).equals('123456789');
                     });
                 });
