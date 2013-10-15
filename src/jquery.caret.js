@@ -201,6 +201,7 @@
         return range;
     };
 
+    /** @see http://stackoverflow.com/a/3648244/467582 */
     var _getInputRangeIE = function(input) {
         var range = new Range();
 
@@ -208,35 +209,45 @@
 
         var selection = document.selection.createRange();
 
-        if (!selection) {
-            return range;
-        }
+        if (selection && selection.parentElement() === input) {
+            var len, normalizedValue, textInputRange, endRange, start = 0, end = 0;
 
-        var tr_beginning = input.createTextRange();
-        var tr_selection = tr_beginning.duplicate();
+            len = input.value.length;
+            normalizedValue = input.value.replace(/\r\n/g, "\n");
 
-        tr_selection.moveToBookmark(selection.getBookmark());
-        tr_beginning.setEndPoint('EndToStart', tr_selection);
+            // Create a working TextRange that lives only in the input
+            textInputRange = input.createTextRange();
+            textInputRange.moveToBookmark(selection.getBookmark());
 
-        var norm = input.value.replace(_rNewlineIE, '\n');
+            // Check if the start and end of the selection are at the very end
+            // of the input, since moveStart/moveEnd doesn't return what we want
+            // in those cases
+            endRange = input.createTextRange();
+            endRange.collapse(false);
 
-        range.start = tr_beginning.text.replace(_rNewlineIE, '\n').length;
-        range.text = selection.text.replace(_rNewlineIE, '\n').replace(_rCarriageReturn, '\n');
-        range.length = range.text.length;
+            if (textInputRange.compareEndPoints("StartToEnd", endRange) > -1) {
+                start = end = len;
+            } else {
+                start = -textInputRange.moveStart("character", -len);
+                start += normalizedValue.slice(0, start).split("\n").length - 1;
 
-        // IE always removes trailing newlines from the end of a selection.
-        // When the user selects text AFTER a newline, tr_beginning will not include the newline(s)
-        // before the selected text, so we have to make up the difference.
-        // E.G.: The user selects "DEF" in "abc\nDEF": tr_beginning will only include "abc" instead of "abc\n",
-        // which means the start position will be incorrect.
-        while (norm.substr(range.start, range.length) !== range.text && range.start < norm.length) {
-            range.start++;
-        }
+                if (textInputRange.compareEndPoints("EndToEnd", endRange) > -1) {
+                    end = len;
+                } else {
+                    end = -textInputRange.moveEnd("character", -len);
+                    end += normalizedValue.slice(0, end).split("\n").length - 1;
+                }
+            }
 
-        range.end = range.start + range.length;
+            /// normalize newlines
+            start -= (input.value.substring(0, start).split('\r\n').length - 1);
+            end -= (input.value.substring(0, end).split('\r\n').length - 1);
+            /// normalize newlines
 
-        if(range.length === 0) {
-            range.start = range.end = _getCaret(input);
+            range.start = start;
+            range.end = end;
+            range.length = range.end - range.start;
+            range.text = normalizedValue.substr(range.start, range.length);
         }
 
         return range;
