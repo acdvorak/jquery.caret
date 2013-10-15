@@ -419,6 +419,13 @@
         }
     };
 
+    var _deselectAll = function() {
+        if (document.selection)
+            document.selection.empty();
+        else if (window.getSelection)
+            window.getSelection().removeAllRanges();
+    };
+
     $.fn.extend({
 
         /**
@@ -539,5 +546,12 @@
             });
         }
 
+    });
+
+    $.extend({
+        deselectAll: function() {
+            _deselectAll();
+            return this;
+        }
     });
 }(jQuery));

@@ -21,7 +21,7 @@ Features
 *   Insert text at cursor position
 *   Replace selected range with text
 *   Handles differences in line endings between browsers
-*   Select all text within any element
+*   Select/deselect all text within any element
 
 API
 ===
@@ -131,6 +131,14 @@ Examples:
 Selects all text in any element (```div```, ```span```, ```input```, ```textarea```, ```label```, etc.).
 
 ### ```.selectAll()``` returns ```jQuery```
+
+## Deselect All
+
+    $.deselectAll()
+
+Deselects all text on the page.
+
+### ```$.deselectAll()``` returns ```jQuery``` function
 
 Types
 =====
