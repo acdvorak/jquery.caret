@@ -232,6 +232,7 @@
 
                     it("Appends text", function() {
                         assert($input.val('abc').caret(3).caret('123').val()).equals('abc123');
+                        assert($input.val('abc').caret(4).caret('123').val()).equals('abc123');
 
                         assert($textarea.val('abc\ndef').caret(7).caret('123').val()).equals('abc\ndef123');
                         assert($textarea.val('abc\ndef').caret(8).caret('123').val()).equals('abc\ndef123');
