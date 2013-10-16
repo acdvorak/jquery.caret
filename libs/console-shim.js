@@ -1,4 +1,4 @@
-// Console-polyfill. MIT license.
+// Console-polyfill v0.1.0. MIT license.
 // https://github.com/paulmillr/console-polyfill
 // Make it safe to do console.log() always.
 (function (con) {

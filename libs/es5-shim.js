@@ -1,3 +1,4 @@
+// ES5 Shim v2.1.0.
 // Copyright 2009-2012 by contributors, MIT License
 // vim: ts=4 sts=4 sw=4 expandtab
 
