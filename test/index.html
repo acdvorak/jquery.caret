@@ -9,14 +9,22 @@
         <div id="qunit"></div>
         <div id="qunit-fixture"></div>
 
+        <!-- Load local jQuery.  This can be overridden with a ?jquery=___ param. -->
         <script src="../libs/jquery-loader.js"></script>
+
+        <!-- Load local QUnit. -->
         <script src="../libs/qunit/qunit-1.12.0.js"></script>
         <script src="../libs/qunit/pavlov-0.4.0pre.js"></script>
+
+        <!-- Load local Caret library. -->
         <script src="../src/jquery.caret.js"></script>
 
+        <!-- Test dependencies. -->
         <script src="../libs/es5-shim-2.1.0.js"></script>
         <script src="../libs/console-shim-0.1.0.js"></script>
         <script src="../libs/json2.js"></script>
+
+        <!-- Unit tests. -->
         <script src="tests.js"></script>
     </body>
 </html>
