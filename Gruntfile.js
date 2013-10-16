@@ -13,7 +13,8 @@ module.exports = function(grunt) {
       ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
     // Task configuration.
     clean: {
-      files: ['dist']
+      files: []
+//      files: ['dist']
     },
     concat: {
       options: {
