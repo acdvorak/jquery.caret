@@ -230,7 +230,7 @@ While not necessarily a huge issue, it's something to be aware of.
 
 In all versions of IE (6-10), clicking _inside_ selected text returns the wrong selection range and caret position.
 
-Run ```test/newline-range.html``` in any version of IE and select some text in the textarea.
+Run ```test/manual/newline-range.html``` in any version of IE and select some text in the textarea.
 Then click anywhere **inside** the selection (without moving the mouse) to see the bug in action.
 
 Clicking _outside_ the selection works just fine.

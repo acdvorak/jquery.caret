@@ -10,24 +10,24 @@
             }
             textarea {
                 width: 100%;
-                height: 10em;
+                height: 15em;
             }
         </style>
     </head>
     <body>
-        <p>Caret position: <b id="pos">...</b></p>
+        <p>Range: <b id="range">...</b></p>
         <textarea></textarea>
 
         <!-- Load local jQuery.  This can be overridden with a ?jquery=___ param. -->
-        <script src="../libs/jquery-loader.js"></script>
+        <script src="../../libs/jquery-loader.js"></script>
 
         <!-- Load local Caret library. -->
-        <script src="../src/jquery.caret.js"></script>
+        <script src="../../src/jquery.caret.js"></script>
 
         <!-- Test dependencies. -->
-        <script src="../libs/es5-shim.js"></script>
-        <script src="../libs/console-shim.js"></script>
-        <script src="../libs/json2.js"></script>
+        <script src="../../libs/es5-shim.js"></script>
+        <script src="../../libs/console-shim.js"></script>
+        <script src="../../libs/json2.js"></script>
 
         <script>
             String.prototype.visualizeNewlines = function() {
@@ -37,24 +37,16 @@
             $(function() {
                 var lineNumbers = [ 1, 2, 3, 4 ];
                 var lines = $.map(lineNumbers,function (val) { return 'Line ' + val; });
-                var text = lines.join('\n');
+                var text = lines.join('\n') + '\n\nABC\n\nDEF';
 
                 var $textarea = $('textarea');
-                var $pos = $('#pos');
+                var $range = $('#range');
 
                 $textarea.val(text);
 
-                $textarea.on('keydown keyup keypress change click', function() {
-                	$pos.text($textarea.caret());
+                $textarea.on('keydown keyup keypress change click mousedown mouseup mousemove', function() {
+                    $range.text(JSON.stringify($textarea.range()));
                 });
-
-                setInterval(function() {
-                    var curCaret = $textarea.caret(),
-                        newCaret = curCaret + 1;
-                    if (curCaret >= $textarea.val().length)
-                        newCaret = 0;
-                    $textarea.caret(newCaret).click();
-                }, 1000);
             });
         </script>
     </body>
