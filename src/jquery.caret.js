@@ -1,4 +1,3 @@
-/*! jQuery Caret plugin v1.5.0 | (c) 2012, 2013 Andrew C. Dvorak | github.com/acdvorak/jquery.caret */
 (function($, undefined) {
 
     var _input = document.createElement('input');
@@ -13,7 +12,7 @@
 
     var _getValue = function(input) {
         if (typeof(input.value) !== 'undefined') {
-            return input.value
+            return input.value;
         }
         return $(input).text();
     };
@@ -409,10 +408,12 @@
     };
 
     var _deselectAll = function() {
-        if (document.selection)
+        if (document.selection) {
             document.selection.empty();
-        else if (window.getSelection)
+        }
+        else if (window.getSelection) {
             window.getSelection().removeAllRanges();
+        }
     };
 
     $.fn.extend({
