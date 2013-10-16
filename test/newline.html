@@ -41,8 +41,8 @@
                     var expectedLength = (end - start);
 
                     alert(
-                            (range.length === expectedLength ? 'Pass' : 'FAIL') + ': found ' + range.length + ', expected ' + expectedLength + '\n' +
-                            (range.text === expectedText ? 'Pass' : 'FAIL') + ': found "' + range.text.visualizeNewlines() + '"' + ', expected ' + '"' + expectedText.visualizeNewlines() + '"'
+                            (range.length === expectedLength ? 'PASS' : 'FAIL') + ': found ' + range.length + ', expected ' + expectedLength + '\n' +
+                            (range.text === expectedText ? 'PASS' : 'FAIL') + ': found "' + range.text.visualizeNewlines() + '"' + ', expected ' + '"' + expectedText.visualizeNewlines() + '"'
                     );
                 }
 
