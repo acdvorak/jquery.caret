@@ -11,17 +11,6 @@
     var _rNewlineIE = /\r\n/g,
         _rCarriageReturn = /\r/g;
 
-    var _format = function() {
-        var str = arguments[0];
-        var args = [].slice.call(arguments, 1);
-        return str.replace(/{(\d+)}/g, function(match, number) {
-            return typeof(args[number]) !== 'undefined'
-                ? args[number]
-                : match
-                ;
-        });
-    };
-
     var _getValue = function(input) {
         if (typeof(input.value) !== 'undefined') {
             return input.value
