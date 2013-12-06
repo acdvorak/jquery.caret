@@ -2,7 +2,7 @@
   "name": "jquery.caret",
   "title": "jQuery Caret Plugin",
   "description": "Gets and sets the caret position and selection range of input/textarea elements",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "homepage": "https://github.com/acdvorak/jquery.caret",
   "author": {
     "name": "Andrew C. Dvorak",
