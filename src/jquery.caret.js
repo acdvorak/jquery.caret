@@ -416,7 +416,7 @@
         }
     };
 
-    $.fn.extend({
+    $.extend($.fn, {
 
         /**
          * Gets or sets the position of the caret or inserts text at the current caret position in an input or textarea element.
@@ -538,7 +538,7 @@
 
     });
 
-    $.extend({
+    $.extend($, {
         /**
          * Deselects all text on the page.
          * @returns {jQuery} The jQuery function
@@ -558,4 +558,4 @@
         }
     });
 
-}(jQuery));
+}(window.jQuery || window.Zepto || window.$));
