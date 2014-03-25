@@ -112,7 +112,7 @@ Examples:
 
 Replace the currently selected text of the first matched element with the given text and select the newly inserted text.
 
-*   ```text``` ```{String}```: Text to replace the current selection with.
+*   ```text``` ```String```: Text to replace the current selection with.
 
 Examples:
 
