@@ -288,29 +288,7 @@
     };
 
     var _setInputRangeIE = function(input, startPos, endPos) {
-        var i;
         var tr = input.createTextRange();
-        var rawValue = _getValue(input);
-
-        // Fix IE from counting the newline characters as two separate characters
-        var stop_it = startPos;
-
-        // TODO: Optimize this awful code
-        for (i = 0; i < stop_it; i++) {
-            if (rawValue.substr(i, 1).search(_rNewlineIE) !== -1) {
-                startPos = startPos - 1;
-            }
-        }
-
-        stop_it = endPos;
-
-        // TODO: Optimize this awful code
-        for (i = 0; i < stop_it; i++) {
-            if (rawValue.substr(i, 1).search(_rNewlineIE) !== -1) {
-                endPos = endPos - 1;
-            }
-        }
-
         tr.moveEnd('textedit', -1);
         tr.moveStart('character', startPos);
         tr.moveEnd('character', endPos - startPos);
