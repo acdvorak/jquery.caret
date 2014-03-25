@@ -106,7 +106,8 @@
             return caret;
         }
 
-        // TODO: This can occur when you highlight part of a textarea and then click in the middle of the highlighted portion in IE 6-10
+        // NOTE: This occurs when you highlight part of a textarea and then click in the middle of the highlighted portion in IE 6-10.
+        //       There doesn't appear to be anything we can do about it.
 //        alert("Your browser is incredibly stupid.  I don't know what else to say.");
 //        alert(range + '\n\n' + range.parentElement().tagName + '#' + range.parentElement().id);
 
