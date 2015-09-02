@@ -1,0 +1,25 @@
+{
+  "name": "jquery-caret",
+  "version": "1.5.2",
+  "homepage": "https://github.com/acdvorak/jquery.caret",
+  "authors": [
+    "Andrew C. Dvorak <acdvorak@gmail.com>"
+  ],
+  "description": "Gets and sets the caret position and selection range of input/textarea elements",
+  "main": "src/jquery.caret.js",
+  "moduleType": [
+    "globals"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "dist",
+    "libs",
+    "jquery.caret.json",
+    "package.json",
+    "Gruntfile.js"
+  ]
+}
